@@ -1,4 +1,9 @@
 [Symbologic-8.txt](https://github.com/user-attachments/files/30973214/Symbologic-8.txt): A Matrix-Based, Symbol-Driven 8-Bit Architecture
+
+Not a General-Purpose CPU: Symbologic-8 does not aim to replace traditional processors, but rather explores an alternative computing paradigm.
+A Pattern-to-Action Accelerator: Designed for high-speed, deterministic tasks where the latency of the traditional von Neumann pipeline becomes a bottleneck.
+A Conceptual & Exploratory Framework: A testbed for studying the transition from bit-level algebra to zero-clock symbol semantics.
+
 An experimental hardware and software framework exploring direct pattern-to-action transcoding, bypassing traditional Boolean execution pipelines.
 
 Abstract
