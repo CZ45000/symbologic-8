@@ -1,4 +1,4 @@
-[Symbologic-8.txt](https://github.com/user-attachments/files/30973214/Symbologic-8.txt) symbologic-8Symbologic-8: A Matrix-Based, Symbol-Driven 8-Bit Architecture
+[Symbologic-8.txt](https://github.com/user-attachments/files/30973214/Symbologic-8.txt): A Matrix-Based, Symbol-Driven 8-Bit Architecture
 An experimental hardware and software framework exploring direct pattern-to-action transcoding, bypassing traditional Boolean execution pipelines.
 
 Abstract
