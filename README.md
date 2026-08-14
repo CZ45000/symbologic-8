@@ -7,7 +7,7 @@ Symbologic-8 is an alternative architectural concept designed to decouple comput
 An incoming 8-bit symbol (0x00 to 0xFF) acts as a direct geometric address that triggers predefined semantic rules, control signals, or mathematical outputs in a single propagation cycle. This repository provides the conceptual framework, hardware description language (HDL) prototypes, and a dedicated translation assembler to help researchers study, simulate, and benchmark this paradigm.
 
 Architectural Overview
-Traditional von Neumann processors break down every concept into a deep cascade of single-bit operations. Symbologic-8 treats the 8-bit byte as an atomic unit of meaning (a symbol).
+Traditional von Neumann processors break down every concept into a deep cascade of single-bit operations. Symbologic-8 treats the 8-bit byte as an atomic unit of meaning (256 symbol).
 
 Incoming 8-bit Symbol ---> [ Combinatorial Matrix (256-way LUT) ] ---> Immediate Direct Output
  (e.g., ASCII, Control, Op)         (Zero-Clock Logic Propagation)          (Action / State Change)
