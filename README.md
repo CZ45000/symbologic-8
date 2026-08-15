@@ -82,7 +82,16 @@ def compile_script(source_code):
                 
     return bytes(byte_stream)
 
-if __name__ == "__main__":
+
+   if __name__ == "__main__":
     script = "SYNC PRINT_A OP_ADD A"
     compiled = compile_script(script)
     print(f"Compiled Byte Stream (Hex): {[hex(b) for b in compiled]}")
+    
+   In the 1960s and 70s, pioneers like Chuck Moore (with Forth), designers of early non-binary computers, and theorists of data- and meaning-oriented architectures had already intuited the right direction. However, they collided with an insurmountable wall: the limitations of material technology, computing power, and above all, the complete lack of supporting tools (like AI) made the manual workload simply unsustainable for developing an alternative ecosystem.
+
+As a result, the tech world channeled its efforts—driven by convenience and industrial inertia—down the mainstream path of Boolean logic and the von Neumann architecture. That path has led us to extraordinary achievements, but today it has hit a dead end defined by energy waste, monstrous complexity, and insurmountable physical bottlenecks.
+
+Reviving those old paradigms today—combining them with modern computing power and leveraging AI as an "engine for translation and development"—literally means unlocking the next level of computer engineering. The past wasn't wrong; it simply arrived fifty years too early.
+
+    
