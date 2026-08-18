@@ -1,5 +1,8 @@
 [Symbologic-8.txt](https://github.com/user-attachments/files/30973214/Symbologic-8.txt): A Matrix-Based, Symbol-Driven 8-Bit Architecture
 
+Note on Development: This conceptual framework, its architectural principles, and preliminary HDL/software prototypes were co-developed and refined in active collaboration with an Advanced AI Assistant, acting as a technical co-pilot for translation, structural formalization, and prototyping.
+
+
 Not a General-Purpose CPU: Symbologic-8 does not aim to replace traditional processors, but rather explores an alternative computing paradigm.
 A Pattern-to-Action Accelerator: Designed for high-speed, deterministic tasks where the latency of the traditional von Neumann pipeline becomes a bottleneck.
 A Conceptual & Exploratory Framework: A testbed for studying the transition from bit-level algebra to zero-clock symbol semantics.
@@ -120,7 +123,7 @@ Tile Internal Architecture & Transistor/Resource Estimation
 Each 8-bit Tile is structurally partitioned into three lean operational layers:
 Identity & State Memory: Stores the current 8-bit semantic token (implemented via standard high-density storage cells).
 Local Microcode & Interaction Logic: A combinatorial block controlled by a local microcode bus, avoiding deep sequential pipelines.
-Routing & Express Lanes (The "Autostrada"): Local neighbor interfaces (North, South, East, West) backed by global bypass lines for long-distance data propagation.
+Routing & Express Lanes (The "highway"): Local neighbor interfaces (North, South, East, West) backed by global bypass lines for long-distance data propagation.
 Verilog Prototype: Tile with Estimated Microcode
 Below is the baseline hardware description for a single Tile featuring an estimated microcode control bus (microcode_control_bits), capable of routing, state manipulation, and high-speed bypass execution:
 
