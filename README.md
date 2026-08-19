@@ -175,7 +175,7 @@ To see how **Symbologic-8** integrates with standard computing infrastructure (s
 
 Here is an example of the potential roles it could assume within a broader infrastructure.
 
-
+```text
   [ Host CPU ] (The Director / Control Plane)
        │
        ▼  (Commands & Orchestration)
