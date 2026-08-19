@@ -189,6 +189,7 @@ Here is an example of the potential roles it could assume within a broader infra
   [ Direct Terminal/Display ]     [ Feedback to Memory ]
   (Zero-overhead I/O streaming)   (Iterative processing loops)  
 
+```
 Key Architectural Roles:
 The Host CPU (The Director):
 Frees itself from heavy sequential pattern-matching and symbolic manipulation. It acts as a high-level manager that decides when and what data streams need to be processed.
