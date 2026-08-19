@@ -169,6 +169,30 @@ Scalability & Roadmap for the Microcode
 Phase 1 (Current): A 4-bit estimated microcode control bus to validate core routing and logic behaviors within a simulated or FPGA-synthesized mesh grid.
 Phase 2 (Evolution): Expanding the microcode width (e.g., to 6-bit or 8-bit buses) to accommodate richer dynamic variations and multi-state logic transitions, directly interfacing with the TernaryBreath co-processor layer without altering the underlying physical silicon fabric.
 
+## System Architecture & Co-Processing Role (The "Director & Artisan" Model)
 
-  
-    
+To see how **Symbologic-8** integrates with standard computing infrastructure (such as AI servers or host workstations), the architecture adopts an **Heterogeneous Co-Processing Model**. Instead of replacing the host CPU, Symbologic-8 acts as a dedicated spatial-semantic accelerator:
+
+```text
+  [ Host CPU ] (The Director / Control Plane)
+       │
+       ▼  (Commands & Orchestration)
+  [ Dedicated Brick Memory ] (Spatial Cache / State Buffer)
+       │
+       ▼  (Direct Ingestion)
+  [ Symbologic-8 FPGA Mesh ] (The Artisan / Spatial Rewriting Factory)
+       │
+       ├─────────────────────────────────┐
+       ▼                                 ▼
+  [ Direct Terminal/Display ]     [ Feedback to Memory ]
+  (Zero-overhead I/O streaming)   (Iterative processing loops)  
+
+Key Architectural Roles:
+The Host CPU (The Director):
+Frees itself from heavy sequential pattern-matching and symbolic manipulation. It acts as a high-level manager that decides when and what data streams need to be processed.
+Dedicated Brick Memory (Spatial Cache):
+A specialized memory buffer designed to store 8-bit symbolic blocks natively in their spatial layout, bypassing the need for complex linear pointer serialization.
+Symbologic-8 Mesh (The Artisan):
+Receives the state blocks and processes massive transformations instantaneously via geometric adjacency and the 16-operator microcode engine, operating entirely off the linear CPU clock constraint.
+Direct Terminal I/O Stream:
+When dealing with standard ASCII payloads (Block 2), the processed blocks bypass host intervention entirely, streaming directly to visual interfaces or logging units for maximum throughput.
