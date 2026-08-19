@@ -173,6 +173,8 @@ Phase 2 (Evolution): Expanding the microcode width (e.g., to 6-bit or 8-bit buse
 
 To see how **Symbologic-8** integrates with standard computing infrastructure (such as AI servers or host workstations), the architecture adopts an **Heterogeneous Co-Processing Model**. Instead of replacing the host CPU, Symbologic-8 acts as a dedicated spatial-semantic accelerator:
 
+Here is an example of the potential roles it could assume within a broader infrastructure.
+
 ```text
   [ Host CPU ] (The Director / Control Plane)
        │
