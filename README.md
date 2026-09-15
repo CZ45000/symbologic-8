@@ -805,3 +805,859 @@ The core research question is therefore:
 > **How much computational overhead can be eliminated or reorganized when data, operations, and routing are represented within a unified semantic token space that can be directly mapped onto spatial hardware?**
 
 This question forms the foundation of the **Symbologic-8 & Semantic-Stream Framework**.
+
+# Symbologic-8 Specification v0.1
+
+### Token-Native Semantic Execution Architecture
+
+**Status:** Experimental / Research Prototype
+**Version:** 0.1
+**Architecture Class:** Spatial Token Processing / Semantic Dataflow
+**Native Token Width:** 8 bits
+**Token Space:** 256 symbols (`0x00–0xFF`)
+
+---
+
+# 1. Architecture Goals
+
+Symbologic-8 defines a compact semantic execution architecture in which computation is represented as the transformation and propagation of 8-bit semantic tokens through a configurable spatial processing mesh.
+
+The architecture is designed around five primary principles:
+
+1. **Token-native representation**
+2. **Direct semantic rule matching**
+3. **Spatial execution**
+4. **Configurable local state**
+5. **Explicit token routing**
+
+The architecture is not intended to replace general-purpose CPUs.
+
+Instead, it targets computational domains where the cost of conventional instruction execution can be reduced by representing operations directly as semantic transitions.
+
+---
+
+# 2. Native Token Model
+
+Every Symbologic-8 token is exactly 8 bits:
+
+```text
+┌────────┬────────┬────────┬────────┬────────┬────────┬────────┬────────┐
+│   b7   │   b6   │   b5   │   b4   │   b3   │   b2   │   b1   │   b0   │
+└────────┴────────┴────────┴────────┴────────┴────────┴────────┴────────┘
+```
+
+Represented as:
+
+```text
+TOKEN[7:0]
+```
+
+Each value from `0x00` through `0xFF` represents one member of the Symbologic semantic alphabet.
+
+A token does not necessarily represent a character.
+
+It represents an **architectural symbol**.
+
+---
+
+# 3. Token Address Space
+
+The initial token allocation is:
+
+```text
+0x00 – 0x1F
+SYSTEM / CONTROL
+
+0x20 – 0x5F
+LOGICAL / MATHEMATICAL PRIMITIVES
+
+0x60 – 0xBF
+SEMANTIC / DOMAIN TOKENS
+
+0xC0 – 0xEF
+EXTENDED SEMANTIC TOKENS
+
+0xF0 – 0xFF
+RUNTIME ALIASES
+```
+
+The exact semantic assignment remains configurable during the experimental phase.
+
+---
+
+# 4. System Tokens
+
+The `0x00–0x1F` region contains architectural control primitives.
+
+Proposed initial definitions:
+
+| Token  | Name        | Function                 |
+| ------ | ----------- | ------------------------ |
+| `0x00` | `NOP`       | No transformation        |
+| `0x01` | `HALT`      | Stop local execution     |
+| `0x02` | `SYNC`      | Synchronization event    |
+| `0x03` | `RESET`     | Reset local state        |
+| `0x04` | `WAIT`      | Wait/state hold          |
+| `0x05` | `EMIT`      | Emit token               |
+| `0x06` | `PASS`      | Forward token            |
+| `0x07` | `DROP`      | Consume token            |
+| `0x08` | `ROUTE`     | Invoke routing rule      |
+| `0x09` | `BROADCAST` | Replicate token          |
+| `0x0A` | `MERGE`     | Merge compatible streams |
+| `0x0B` | `SPLIT`     | Split processing path    |
+
+Remaining values are reserved.
+
+---
+
+# 5. Logical and Mathematical Primitives
+
+The `0x20–0x5F` range contains basic computational primitives.
+
+Initial proposal:
+
+| Token  | Name  | Meaning               |
+| ------ | ----- | --------------------- |
+| `0x20` | `ADD` | Addition              |
+| `0x21` | `SUB` | Subtraction           |
+| `0x22` | `MUL` | Multiplication        |
+| `0x23` | `DIV` | Division              |
+| `0x24` | `MOD` | Modulo                |
+| `0x25` | `EQ`  | Equality              |
+| `0x26` | `NEQ` | Inequality            |
+| `0x27` | `LT`  | Less-than             |
+| `0x28` | `GT`  | Greater-than          |
+| `0x29` | `LTE` | Less-than-or-equal    |
+| `0x2A` | `GTE` | Greater-than-or-equal |
+| `0x2B` | `AND` | Logical AND           |
+| `0x2C` | `OR`  | Logical OR            |
+| `0x2D` | `XOR` | Logical XOR           |
+| `0x2E` | `NOT` | Logical inversion     |
+| `0x2F` | `NEG` | Numeric negation      |
+
+The remaining range is reserved for additional primitives.
+
+---
+
+# 6. Semantic Token Layer
+
+The `0x60–0xBF` region represents higher-level semantic primitives.
+
+Unlike mathematical operators, these tokens are intended to represent **domain-level concepts or operations**.
+
+Examples:
+
+```text
+0x60  INPUT
+0x61  OUTPUT
+0x62  DATA
+0x63  VALUE
+0x64  OBJECT
+0x65  LIST
+0x66  MAP
+0x67  MATCH
+0x68  FILTER
+0x69  CLASSIFY
+0x6A  VALIDATE
+0x6B  TRANSFORM
+0x6C  SELECT
+0x6D  REDUCE
+0x6E  AGGREGATE
+0x6F  ROUTE
+```
+
+Domain-specific vocabularies may occupy additional ranges.
+
+For example, a networking implementation could define:
+
+```text
+NETWORK.PACKET
+NETWORK.ADDRESS
+NETWORK.PROTOCOL
+NETWORK.ROUTE
+```
+
+while a language-processing implementation could define:
+
+```text
+TEXT.WORD
+TEXT.TOKEN
+TEXT.SENTENCE
+TEXT.GRAMMAR
+TEXT.MATCH
+```
+
+The same physical architecture can therefore support different semantic dictionaries.
+
+---
+
+# 7. Runtime Alias Space
+
+The `0xF0–0xFF` region is reserved for runtime aliases.
+
+Each alias is a compact reference to an externally stored object.
+
+Example:
+
+```text
+0xF1 → Object #17
+0xF2 → Pattern #03
+0xF3 → Large Integer #08
+0xF4 → Data Structure #12
+```
+
+The alias table can conceptually be represented as:
+
+```text
+┌────────┬────────────────────┐
+│ Token  │ Object Reference   │
+├────────┼────────────────────┤
+│  F0    │ Object #00         │
+│  F1    │ Object #01         │
+│  F2    │ Object #02         │
+│  ...   │ ...                │
+│  FF    │ Object #15         │
+└────────┴────────────────────┘
+```
+
+Aliases are therefore **references, not containers**.
+
+This distinction is fundamental to the architecture.
+
+---
+
+# 8. Token Packet
+
+A token travelling through the mesh may optionally carry metadata.
+
+The minimal representation is:
+
+```text
+TOKEN = 8 bits
+```
+
+A prototype implementation may extend this to:
+
+```text
+┌──────────┬──────────┬──────────┬──────────┐
+│ TOKEN    │ SOURCE   │ FLAGS    │ CONTEXT  │
+│ 8 bits   │ 8 bits   │ 8 bits   │ 8 bits   │
+└──────────┴──────────┴──────────┴──────────┘
+```
+
+However, the semantic token itself remains 8 bits.
+
+This distinction allows the architecture to preserve an extremely compact semantic representation while still supporting richer transport protocols.
+
+---
+
+# 9. Tile Architecture
+
+Each Tile is an independent processing element.
+
+Conceptual architecture:
+
+```text
+             NORTH
+               ▲
+               │
+        ┌──────┴──────┐
+        │             │
+ WEST ◄─┤    TILE     ├─► EAST
+        │             │
+        └──────┬──────┘
+               │
+               ▼
+             SOUTH
+```
+
+A Tile contains:
+
+```text
+┌─────────────────────────────┐
+│         TILE                │
+│                             │
+│  Token Input                │
+│       │                     │
+│       ▼                     │
+│  Pattern Matcher            │
+│       │                     │
+│       ▼                     │
+│  Rule Resolver              │
+│       │                     │
+│       ├──► State Update      │
+│       │                     │
+│       ├──► Token Transform   │
+│       │                     │
+│       └──► Router            │
+│                             │
+│  Local State Memory         │
+│  Alias Interface            │
+└─────────────────────────────┘
+```
+
+---
+
+# 10. Pattern Matching
+
+The pattern matcher determines whether an incoming token corresponds to a configured rule.
+
+Simplest implementation:
+
+```text
+if token == rule.token:
+    activate(rule)
+```
+
+More advanced implementations may support:
+
+```text
+TOKEN
++
+LOCAL STATE
++
+FLAGS
++
+CONTEXT
+```
+
+as a composite matching condition.
+
+For example:
+
+```text
+MATCH:
+
+TOKEN == MATCH
+AND STATE == SEARCHING
+```
+
+may generate:
+
+```text
+ACTION → CLASSIFY
+```
+
+---
+
+# 11. Rule Representation
+
+A rule can conceptually be defined as:
+
+```text
+RULE {
+    input_token
+    state_condition
+    output_token
+    next_state
+    route
+}
+```
+
+Example:
+
+```text
+RULE {
+    input_token  = MATCH
+    state        = SEARCHING
+    output_token = CLASSIFY
+    next_state   = CLASSIFYING
+    route        = EAST
+}
+```
+
+The hardware implementation may encode this rule using LUTs, ROM tables, CAM-like structures, or other configurable logic.
+
+---
+
+# 12. State Machine
+
+Each Tile may maintain a small local state.
+
+For example:
+
+```text
+IDLE
+ ↓
+RECEIVE
+ ↓
+MATCH
+ ↓
+TRANSFORM
+ ↓
+ROUTE
+ ↓
+IDLE
+```
+
+A token can therefore trigger both:
+
+```text
+new token
+```
+
+and:
+
+```text
+new local state
+```
+
+The basic transition model is:
+
+```text
+(state, token) → (new_state, output_token, route)
+```
+
+This provides the formal foundation for semantic execution.
+
+---
+
+# 13. Spatial Routing
+
+After a rule is resolved, the resulting token may be routed spatially.
+
+Possible directions:
+
+```text
+NORTH
+SOUTH
+EAST
+WEST
+LOCAL
+BROADCAST
+BYPASS
+OUTPUT
+```
+
+For example:
+
+```text
+TOKEN_A
+   │
+   ▼
+┌───────┐
+│ TILE  │
+└───┬───┘
+    │
+    ▼
+TOKEN_B
+    │
+    ▼
+  EAST
+```
+
+Routing is therefore part of the semantic execution model rather than merely an implementation detail.
+
+---
+
+# 14. Bypass Network
+
+Large meshes can suffer from excessive hop counts.
+
+Symbologic-8 therefore allows optional long-distance channels:
+
+```text
+T00 ── T01 ── T02 ── T03
+ │                    │
+ │══════ BYPASS ══════│
+ │                    │
+ ▼                    ▼
+T10                  T13
+```
+
+A semantic rule may therefore specify:
+
+```text
+ROUTE = BYPASS(13)
+```
+
+rather than requiring the token to traverse every intermediate Tile.
+
+---
+
+# 15. Execution Semantics
+
+The fundamental execution equation is:
+
+```text
+TOKEN + STATE
+      ↓
+   MATCH
+      ↓
+    RULE
+      ↓
+┌─────┴───────────┐
+│                 │
+▼                 ▼
+NEW TOKEN      NEW STATE
+      │
+      ▼
+   ROUTING
+```
+
+Formally:
+
+```text
+(T, S) → (T', S', R)
+```
+
+where:
+
+* `T` = incoming token;
+* `S` = current state;
+* `T'` = resulting token;
+* `S'` = resulting state;
+* `R` = routing decision.
+
+This equation represents the fundamental semantic transition of a Tile.
+
+---
+
+# 16. Semantic Stream
+
+A **Semantic Stream** is an ordered sequence of tokens:
+
+```text
+T0 → T1 → T2 → T3 → T4
+```
+
+Unlike a conventional instruction stream, tokens may be:
+
+* transformed;
+* duplicated;
+* merged;
+* consumed;
+* redirected;
+* spatially distributed.
+
+Therefore a Semantic Stream can evolve into a graph:
+
+```text
+             ┌──► T2 ──► T4
+T0 ──► T1 ───┤
+             └──► T3 ──► T5
+```
+
+This is a key distinction between Symbologic-8 and a purely sequential instruction architecture.
+
+---
+
+# 17. Semantic Assembly
+
+A high-level description:
+
+```text
+detect → classify → validate → route
+```
+
+could be encoded as:
+
+```text
+[DETECT] [CLASSIFY] [VALIDATE] [ROUTE]
+```
+
+and then mapped to:
+
+```text
+0x6A 0x69 0x6A 0x6F
+```
+
+depending on the active semantic dictionary.
+
+The assembler is responsible for:
+
+1. tokenization;
+2. semantic resolution;
+3. alias allocation;
+4. dependency resolution;
+5. token optimization;
+6. generation of the final semantic stream.
+
+---
+
+# 18. Example: Pattern Detection
+
+Consider:
+
+```text
+IF INPUT == PATTERN_A
+THEN EMIT ACTION_B
+```
+
+The assembler may generate:
+
+```text
+INPUT
+PATTERN_A
+MATCH
+ACTION_B
+```
+
+The mesh could execute:
+
+```text
+       INPUT
+          │
+          ▼
+       MATCH
+          │
+     ┌────┴────┐
+     │         │
+   FAIL       PASS
+     │         │
+   DROP     ACTION_B
+```
+
+No general-purpose instruction pipeline is required for the semantic decision itself.
+
+The exact physical implementation remains hardware-dependent.
+
+---
+
+# 19. Example: Runtime Alias
+
+Suppose a large structure is represented by:
+
+```text
+0xF1
+```
+
+with:
+
+```text
+0xF1 → CUSTOMER_DATABASE
+```
+
+A semantic stream might contain:
+
+```text
+LOAD 0xF1
+FILTER
+CLASSIFY
+OUTPUT
+```
+
+The mesh can therefore manipulate a compact reference to the structure rather than transporting the entire structure as part of the token stream.
+
+---
+
+# 20. Hardware Implementation
+
+The initial hardware target is FPGA.
+
+Potential implementation technologies include:
+
+* Verilog;
+* SystemVerilog;
+* FPGA LUT fabric;
+* block RAM;
+* distributed RAM;
+* configurable routing;
+* optional external memory.
+
+The first implementation should prioritize **clarity and measurability** over maximum optimization.
+
+Recommended initial target:
+
+```text
+4 × 4 Tile Mesh
+```
+
+with:
+
+```text
+16 Tiles
+8-bit semantic tokens
+16–32 initial semantic primitives
+local state registers
+basic routing
+small alias table
+```
+
+---
+
+# 21. Reference Software Model
+
+Before hardware implementation, a cycle-accurate or event-driven software model should be developed.
+
+Suggested structure:
+
+```text
+assembler/
+    semantic_parser.py
+    token_encoder.py
+    alias_manager.py
+    optimizer.py
+
+sim/
+    token.py
+    tile.py
+    rule_engine.py
+    router.py
+    mesh.py
+    simulator.py
+```
+
+The software simulator becomes the **reference architecture** against which the Verilog implementation can be validated.
+
+---
+
+# 22. Verification Strategy
+
+Every hardware rule should have a corresponding software test.
+
+Example:
+
+```text
+Input:
+    ADD A B
+
+Expected:
+    RESULT = A + B
+```
+
+The same semantic stream should be executed by:
+
+```text
+Python Reference Model
+        │
+        ├──────► Expected Result
+        │
+        ▼
+Verilog Simulation
+        │
+        └──────► Actual Result
+```
+
+The two results must match.
+
+This creates a practical path from conceptual architecture to verified hardware.
+
+---
+
+# 23. Benchmark Strategy
+
+The first benchmark suite should contain workloads that favor spatial token processing.
+
+### Benchmark A — Pattern Matching
+
+Measure:
+
+```text
+tokens/sec
+latency
+LUT usage
+power
+```
+
+### Benchmark B — Rule Engine
+
+Measure:
+
+```text
+rules/sec
+latency per decision
+mesh utilization
+```
+
+### Benchmark C — Stream Transformation
+
+Measure:
+
+```text
+input throughput
+output throughput
+token transformations/sec
+```
+
+### Benchmark D — Grammar Validation
+
+Measure:
+
+```text
+tokens/sec
+valid/invalid decisions/sec
+state transitions/sec
+```
+
+---
+
+# 24. CPU Comparison
+
+The comparison should be performed against optimized software running on a conventional processor.
+
+The goal is not:
+
+> "Symbologic-8 is faster than CPUs."
+
+The meaningful question is:
+
+> **For which workloads does spatial semantic execution provide a measurable advantage in latency, throughput, energy, or implementation efficiency?**
+
+This distinction is essential for scientifically evaluating the architecture.
+
+---
+
+# 25. Architectural Hypothesis
+
+The primary research hypothesis is:
+
+> **A computational workload whose operations can be expressed as compact token/state transformations may benefit from being mapped spatially onto configurable hardware, reducing some forms of instruction decoding, centralized control, and data movement overhead.**
+
+The hypothesis must be validated experimentally.
+
+---
+
+# 26. Long-Term Architecture
+
+Future versions could explore:
+
+```text
+Symbologic-8
+     │
+     ├── Semantic CPU
+     │
+     ├── Semantic FPGA
+     │
+     ├── AI Execution Layer
+     │
+     ├── Distributed Semantic Mesh
+     │
+     └── Semantic Accelerator
+```
+
+Potential future features include:
+
+* larger token spaces;
+* hierarchical semantic dictionaries;
+* programmable rule tables;
+* dynamic mesh reconfiguration;
+* distributed alias stores;
+* asynchronous execution;
+* hardware-assisted AI workflows;
+* semantic graph execution;
+* heterogeneous Tile types.
+
+---
+
+# 27. Core Principle
+
+Symbologic-8 is based on a simple architectural proposition:
+
+```text
+Traditional:
+
+Instruction → Decode → Execute
+
+Symbologic:
+
+Token → Recognize → Transform → Propagate
+```
+
+The architecture therefore treats **semantic representation, computation, and routing as closely related aspects of the same execution model**.
+
+The fundamental research question is:
+
+> **How much computational overhead can be eliminated or reorganized when operations, data references, and routing decisions are represented within a unified semantic token space directly mapped onto spatial hardware?**
+
+Symbologic-8 v0.1 provides the minimum architecture required to experimentally investigate that question.
