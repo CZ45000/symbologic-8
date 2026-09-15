@@ -274,3 +274,534 @@ Pattern Matching and String/Data Compression
 
 By shifting computation from the time domain (clock cycles) to the spatial domain (grid interaction), this design offers a radically efficient path forward for post-von Neumann computing.
 
+# Symbologic-8 & Semantic-Stream Framework
+
+### An Experimental Token-Native Computing Architecture for Direct Semantic Execution
+
+**Symbologic-8** is an experimental computing paradigm that explores an alternative to conventional von Neumann-style execution by shifting the focus from sequential instruction processing toward the **spatial propagation of semantic tokens through a configurable hardware network**.
+
+The central idea is to treat an 8-bit byte not merely as a numerical container, but as an **atomic semantic unit** belonging to a vocabulary of 256 possible symbols.
+
+Rather than transforming every operation into a conventional sequence of instruction fetch, decode, arithmetic execution, register access, memory access, and branching, Symbologic-8 explores a model in which an incoming token can be directly recognized by a network of rules and transformed into a new token, a state transition, or a routing action.
+
+The goal is not to eliminate conventional digital computation, but to **reorganize computation into a spatial, token-native execution model**, particularly suited to pattern matching, semantic stream processing, rule-based systems, grammar validation, and structured data transformation.
+
+---
+
+# 🧠 Concept Overview
+
+Traditional processors generally represent computation as a sequence of instructions that must be fetched, decoded, scheduled, and executed.
+
+Symbologic-8 proposes a different conceptual execution path:
+
+```text
+Traditional CPU
+
+Data
+ ↓
+Fetch
+ ↓
+Decode
+ ↓
+Execute
+ ↓
+Register / Memory Operations
+ ↓
+Branch / Next Instruction
+```
+
+versus:
+
+```text
+Symbologic-8
+
+Semantic Token
+ ↓
+Pattern Recognition
+ ↓
+Rule Resolution
+ ↓
+Transformation / Routing / State Transition
+ ↓
+Next Semantic Token
+```
+
+In this model, a token may simultaneously act as:
+
+* a compact representation of information;
+* a semantic address;
+* a rule selector;
+* a routing element;
+* a trigger for a state transition.
+
+Computation therefore emerges from the **propagation, recognition, and transformation of tokens across a spatial processing network**.
+
+---
+
+# 🔣 The Native Semantic Alphabet
+
+Symbologic-8 defines a 256-symbol address space based on the full 8-bit range:
+
+```text
+0x00 – 0x1F    System Control / Routing / Synchronization
+0x20 – 0x5F    Mathematical / Logical Operators
+0x60 – 0xBF    Domain Semantic Tokens
+0xC0 – 0xFF    Dynamic Workspace / Runtime Aliases
+```
+
+This organization is intentionally independent of historical character encodings such as ASCII.
+
+The purpose is not universal textual compatibility, but the creation of a **compact semantic address space** optimized for hardware recognition and routing.
+
+A token can represent:
+
+* an operation;
+* a logical primitive;
+* a semantic concept;
+* a routing instruction;
+* a state marker;
+* or a reference to a larger external structure.
+
+The 8-bit representation provides a simple hardware-native unit for storage, comparison, lookup, and routing.
+
+---
+
+# ⚙️ Semantic Encoding & Assembly
+
+The **Semantic Assembler** translates higher-level descriptions into Symbologic-8 token streams.
+
+For example, an abstract operation such as:
+
+```text
+ADD operand_A operand_B
+```
+
+could be represented as:
+
+```text
+[ADD] [operand_A] [operand_B]
+```
+
+and encoded into a sequence of 8-bit semantic tokens.
+
+Unlike a conventional assembler, the goal is not necessarily to produce a traditional opcode stream for a CPU.
+
+Instead, the assembler produces a **semantic token stream optimized for propagation through the Symbologic-8 execution mesh**.
+
+This allows part of the work normally performed at runtime to be shifted toward compilation, configuration, or semantic preprocessing.
+
+The resulting token stream can therefore function as both:
+
+1. a compact representation of the intended computation;
+2. an input sequence for the hardware execution network.
+
+---
+
+# 🔗 Dynamic Aliasing
+
+The `0xC0–0xFF` region can be used as a **Dynamic Workspace** for temporary semantic aliases.
+
+For example:
+
+```text
+0xF1 → Complex Object
+0xF2 → Large Number
+0xF3 → Pattern Definition
+0xF4 → Structured Data
+```
+
+A token such as:
+
+```text
+0xF1
+```
+
+does not necessarily contain the entire object.
+
+Instead, it acts as a **compact semantic handle** referring to a structure maintained in an associated memory, lookup table, or runtime alias store.
+
+This makes it possible to manipulate objects significantly larger than 8 bits while preserving a compact token representation within the execution mesh.
+
+Dynamic aliasing therefore does not remove the underlying complexity of large data structures.
+
+Instead, it **separates semantic representation from data storage**, allowing the mesh to operate on compact references rather than repeatedly propagating entire structures.
+
+---
+
+# 🏗️ Homogeneous Tile-Grid Hardware
+
+The physical execution layer is based on a grid of relatively homogeneous processing cells, referred to as **Tiles**.
+
+A conceptual implementation might look like:
+
+```text
+┌─────┬─────┬─────┬─────┐
+│ T00 │ T01 │ T02 │ T03 │
+├─────┼─────┼─────┼─────┤
+│ T10 │ T11 │ T12 │ T13 │
+├─────┼─────┼─────┼─────┤
+│ T20 │ T21 │ T22 │ T23 │
+├─────┼─────┼─────┼─────┤
+│ T30 │ T31 │ T32 │ T33 │
+└─────┴─────┴─────┴─────┘
+```
+
+Each Tile may contain several functional components.
+
+### Identity & State Memory
+
+Local storage for:
+
+* current semantic token;
+* local state;
+* control flags;
+* alias references;
+* routing information.
+
+### Combinational Pattern Logic
+
+Configurable logic responsible for:
+
+* token recognition;
+* pattern matching;
+* rule selection;
+* token transformation;
+* state-transition generation.
+
+### Local Routing Network
+
+Routing paths allowing tokens to propagate toward:
+
+* neighboring tiles;
+* specific regions of the mesh;
+* global outputs;
+* dedicated bypass channels.
+
+### Highway Bypass Lanes
+
+Dedicated long-distance paths allowing tokens to cross significant portions of the mesh without necessarily traversing every intermediate tile.
+
+---
+
+# ⚡ Clockless Combinational Semantic Propagation
+
+One of the architectural characteristics explored by Symbologic-8 is the ability to implement portions of token processing using **combinational or asynchronous logic**, avoiding the need for a separate clocked execution stage for every semantic transformation.
+
+Conceptually:
+
+```text
+INPUT TOKEN
+     │
+     ▼
+┌───────────────┐
+│ Pattern Match │
+└───────┬───────┘
+        │
+        ▼
+┌───────────────┐
+│ Rule Selection│
+└───────┬───────┘
+        │
+        ▼
+┌───────────────┐
+│ Transformation│
+└───────┬───────┘
+        │
+        ▼
+OUTPUT TOKEN
+```
+
+This should not be interpreted as literally requiring zero physical execution time.
+
+Signals still require physical propagation time through logic, routing resources, and interconnects.
+
+The more precise architectural description is therefore:
+
+> **Clockless combinational semantic propagation**
+
+where appropriate.
+
+Stateful operations, feedback loops, synchronization, memory access, and external interfaces may still require conventional timing mechanisms.
+
+---
+
+# 🔄 Semantic Execution Model
+
+A Tile can conceptually process an incoming token according to the following model:
+
+```text
+Token + Local State
+        │
+        ▼
+Pattern Recognition
+        │
+        ▼
+Rule Resolution
+        │
+        ├──────► State Update
+        │
+        ├──────► Token Transformation
+        │
+        └──────► Spatial Routing
+                         │
+                         ▼
+                    Next Tile
+```
+
+Unlike a conventional CPU, where execution is primarily organized around a centralized instruction stream, Symbologic-8 distributes computation across physical space.
+
+The resulting architecture can be viewed as a **distributed symbolic transformation network**.
+
+Conceptually, it shares characteristics with:
+
+* programmable logic;
+* finite-state machines;
+* rewriting systems;
+* dataflow architectures;
+* cellular automata;
+* spatial accelerators;
+* pattern-matching engines.
+
+However, the defining characteristic of Symbologic-8 is the use of **semantic tokens as the native execution primitives**.
+
+---
+
+# 🎯 Target Applications
+
+Symbologic-8 is not intended to claim universal superiority over CPUs.
+
+Its primary target is workloads with high degrees of:
+
+* pattern regularity;
+* parallelism;
+* local state;
+* deterministic transformation;
+* token routing;
+* rule-based decision making.
+
+Potential applications include:
+
+### Pattern Matching
+
+```text
+Input Stream
+     ↓
+Pattern Detection
+     ↓
+Semantic Token
+     ↓
+Action
+```
+
+### Rule Engines
+
+```text
+IF Token == X
+AND State == Y
+THEN Emit Z
+```
+
+### Grammar Validation
+
+```text
+TOKEN_A → TOKEN_B → TOKEN_C
+                 ↓
+          Valid Transition
+```
+
+### Stream Processing
+
+```text
+Input Stream
+     ↓
+Tokenization
+     ↓
+Semantic Mesh
+     ↓
+Parallel Transformation
+     ↓
+Output Stream
+```
+
+### Semantic Routing
+
+Different token classes can determine different physical paths through the mesh.
+
+### Structured Data Transformation
+
+Complex data structures can be represented through compact semantic aliases and transformed according to predefined rules.
+
+### AI-Oriented Execution
+
+An AI system could generate semantic token streams representing structured workflows, which are then executed by the Symbologic-8 hardware layer.
+
+This creates a possible separation between:
+
+```text
+AI / Human Reasoning
+        ↓
+Semantic Representation
+        ↓
+Semantic Assembler
+        ↓
+Token Stream
+        ↓
+Symbologic-8 Mesh
+        ↓
+Physical Execution
+```
+
+---
+
+# 🤖 Human-AI Symbiosis
+
+A major goal of the framework is to provide an intermediate representation that is compact enough for machines while remaining conceptually aligned with human and AI abstractions.
+
+A high-level workflow such as:
+
+```text
+detect → classify → validate → route → transform
+```
+
+could be represented as a sequence of semantic tokens.
+
+An AI system could therefore operate primarily at the level of:
+
+* semantic composition;
+* rule generation;
+* token optimization;
+* workflow transformation;
+* hardware-aware execution planning.
+
+The hardware would then provide the execution substrate for these semantic primitives.
+
+This creates a potential interface between **AI-generated logic and spatial hardware execution** without requiring every high-level operation to be translated into a conventional instruction sequence.
+
+---
+
+# 📂 Repository Structure
+
+```text
+/symbologic-8
+│
+├── /hdl
+│   ├── tile.v
+│   ├── pattern_matcher.v
+│   ├── semantic_router.v
+│   ├── alias_table.v
+│   └── mesh.v
+│
+├── /assembler
+│   ├── lexer.py
+│   ├── semantic_compiler.py
+│   ├── alias_manager.py
+│   └── optimizer.py
+│
+├── /sim
+│   ├── reference_model.py
+│   └── test_vectors/
+│
+├── /benchmarks
+│   ├── pattern_matching/
+│   ├── rule_engine/
+│   └── stream_processing/
+│
+└── /docs
+    ├── architecture.md
+    ├── semantic_alphabet.md
+    ├── aliasing.md
+    ├── tile_mesh.md
+    └── roadmap.md
+```
+
+---
+
+# 🧪 Experimental Validation
+
+The framework should ultimately be evaluated through reproducible simulations and FPGA prototypes rather than theoretical claims alone.
+
+An initial prototype could use a small mesh such as:
+
+```text
+4 × 4 Tiles
+```
+
+with an initial semantic vocabulary of approximately:
+
+```text
+16–32 primitive tokens
+```
+
+The prototype could then be benchmarked against a conventional CPU implementation across several workloads:
+
+1. Pattern Matching
+2. Rule-Based Processing
+3. Stream Transformation
+4. Grammar Validation
+5. Semantic Token Routing
+
+Relevant metrics would include:
+
+* latency;
+* throughput;
+* tokens processed per second;
+* LUT utilization;
+* flip-flop utilization;
+* routing overhead;
+* memory usage;
+* power consumption;
+* energy per operation;
+* scalability as mesh size increases.
+
+The objective is not to demonstrate that Symbologic-8 is universally faster than a CPU.
+
+Instead, the objective is to determine **which classes of workloads benefit from token-native spatial execution and under what architectural conditions**.
+
+---
+
+# 🚀 Core Thesis
+
+The central hypothesis of Symbologic-8 can be summarized as follows:
+
+> **When information representation and operation representation are unified within a semantic token space that can be directly mapped onto configurable hardware, part of the overhead traditionally associated with instruction decoding, centralized control, and data movement can be replaced by spatial pattern recognition, rule resolution, and token propagation.**
+
+Symbologic-8 is therefore not simply an attempt to define another Instruction Set Architecture.
+
+It explores a different execution model:
+
+```text
+Traditional Computing
+
+Instruction
+    ↓
+Decode
+    ↓
+Control
+    ↓
+Execute
+    ↓
+State
+
+
+Symbologic-8
+
+Semantic Token
+    ↓
+Pattern Recognition
+    ↓
+Rule Resolution
+    ↓
+Spatial Propagation
+    ↓
+Transformation
+    ↓
+New State
+```
+
+The fundamental architectural proposition is that **the semantic structure of a program can become part of the physical structure of its execution engine**.
+
+The core research question is therefore:
+
+> **How much computational overhead can be eliminated or reorganized when data, operations, and routing are represented within a unified semantic token space that can be directly mapped onto spatial hardware?**
+
+This question forms the foundation of the **Symbologic-8 & Semantic-Stream Framework**.
