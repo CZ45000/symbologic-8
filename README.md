@@ -1661,3 +1661,492 @@ The fundamental research question is:
 > **How much computational overhead can be eliminated or reorganized when operations, data references, and routing decisions are represented within a unified semantic token space directly mapped onto spatial hardware?**
 
 Symbologic-8 v0.1 provides the minimum architecture required to experimentally investigate that question.
+
+# Symbologic-8: Architectural, Memory, and Device-Level Research Directions
+
+## Abstract
+
+Symbologic-8 is an experimental computing framework based on the concept of treating an 8-bit value as an atomic symbolic token rather than exclusively as a collection of individual binary operations.
+
+The current architecture explores a direct mapping between an incoming 8-bit symbol and a predefined action through a combinatorial lookup structure. The conceptual model is therefore:
+
+```text
+8-bit Symbol → Symbolic Mapping → Action
+```
+
+rather than the conventional model in which a processor continuously decomposes instructions into sequences of arithmetic, logical, and control operations.
+
+The purpose of this document is not to define a single final implementation of Symbologic-8. Instead, it establishes an open research space in which multiple architectural, memory, and physical-device technologies can be investigated independently and, where appropriate, combined at a later stage.
+
+In particular, the framework allows research into different forms of symbolic mapping, alternative memory organizations, emerging memory technologies, heterogeneous computational fabrics, and potentially different physical devices used to implement the computational substrate.
+
+The central hypothesis is that changing the underlying memory or device technology may not simply improve an existing processor architecture. It may produce a substantially different class of computational system with different characteristics, capabilities, reconfiguration models, persistence properties, and computational primitives.
+
+Symbologic-8 is therefore proposed as a framework for exploring the relationship between **symbolic architecture, memory technology, and physical device technology**.
+
+---
+
+# 1. Current Symbologic-8 Architecture
+
+The current Symbologic-8 concept defines an 8-bit input space from `0x00` to `0xFF`, where each value may represent a control symbol, semantic token, mathematical operator, or other predefined symbolic entity.
+
+The original architecture describes the incoming byte as an atomic symbol and uses a combinatorial lookup matrix to generate a corresponding output action.
+
+The conceptual data path is:
+
+```text
+                 8-bit Symbol
+                       |
+                       v
+          +-------------------------+
+          |  Symbolic Mapping       |
+          |       Matrix            |
+          +-------------------------+
+                       |
+                       v
+                Action / State
+```
+
+The current HDL prototype implements this principle using combinatorial logic and explicit symbol-to-action mappings. For example, specific input values are associated with control operations, ASCII-related actions, and mathematical operations.
+
+The software side of the prototype provides a corresponding semantic assembler. Symbolic commands such as `NOP`, `SYNC`, `PRINT_A`, and `OP_ADD` are translated into the corresponding 8-bit values, producing a byte stream suitable for the symbolic processing model.
+
+This architecture therefore provides a compact experimental foundation from which several different implementation directions can be explored.
+
+---
+
+# 2. Beyond a Single Implementation
+
+Symbologic-8 should not be interpreted as prescribing a single hardware implementation.
+
+The same symbolic abstraction may potentially be realized through substantially different physical and architectural mechanisms.
+
+This creates three complementary research dimensions:
+
+```text
+                         Symbologic-8
+                              |
+             +----------------+----------------+
+             |                |                |
+             v                v                v
+       Architecture         Memory           Device
+         Research          Research          Research
+             |                |                |
+          LUT / Mesh       SRAM / TCAM      CMOS / MRAM /
+          Routing          BRAM / etc.      RRAM / etc.
+             |                |                |
+             +----------------+----------------+
+                              |
+                              v
+                   Alternative Processor
+                       Implementations
+```
+
+These dimensions should initially remain independent.
+
+A technology should not be introduced merely because it is technologically newer. Its relevance should be determined experimentally by examining what new computational characteristics it makes possible.
+
+---
+
+# 3. Architectural Research Direction
+
+The first research direction concerns the architecture itself.
+
+The current implementation uses a combinatorial symbolic mapping structure. This can be expanded into alternative organizations without changing the fundamental symbolic abstraction.
+
+Possible research directions include:
+
+* larger or hierarchical symbolic mapping structures;
+* distributed symbolic lookup tables;
+* spatial symbolic meshes;
+* localized routing structures;
+* programmable symbolic dictionaries;
+* pattern-based symbolic recognition;
+* heterogeneous symbolic tiles;
+* dynamic mapping and reconfiguration.
+
+The objective is to determine how far the symbolic model can be extended while preserving its fundamental property:
+
+```text
+Symbol → Direct Mapping → Action
+```
+
+This research direction is independent of any specific memory technology.
+
+A symbolic architecture could therefore be studied first using conventional CMOS-based logic and programmable memory structures before introducing emerging physical technologies.
+
+---
+
+# 4. Memory as an Architectural Variable
+
+A second research direction concerns the memory technology used to implement symbolic mappings.
+
+In conventional processor design, memory is often treated primarily as a storage subsystem.
+
+For Symbologic-8, the mapping structure is much closer to the computational mechanism itself.
+
+Consequently, the technology used to implement that structure may directly influence the behavior of the processor.
+
+This creates a new design question:
+
+> **What characteristics can be obtained when the same symbolic architecture is implemented using different memory technologies?**
+
+Potential implementations include:
+
+### SRAM
+
+SRAM-based structures could emphasize:
+
+* high-speed lookup;
+* deterministic access;
+* rapid reconfiguration;
+* programmable symbolic dictionaries.
+
+### FPGA BRAM and Distributed RAM
+
+FPGA memory structures provide a practical environment for testing different organizations of symbolic tables and evaluating:
+
+* resource utilization;
+* timing;
+* density;
+* reconfiguration;
+* parallelism.
+
+### TCAM
+
+TCAM introduces a fundamentally different computational primitive.
+
+Instead of:
+
+```text
+symbol → exact address → action
+```
+
+the architecture can potentially explore:
+
+```text
+symbol / pattern / mask → match → action
+```
+
+This opens research into parallel content matching and symbolic pattern recognition.
+
+### MRAM
+
+MRAM introduces non-volatile memory characteristics that could be investigated for persistent symbolic configuration.
+
+### RRAM and Memristive Technologies
+
+RRAM and memristive devices provide an opportunity to investigate whether the physical state of a memory element can become directly involved in computation rather than merely storing a binary configuration.
+
+These technologies should not be assumed to provide an improvement over conventional implementations. Their purpose within the research framework is to determine whether they enable **different computational behaviors**.
+
+---
+
+# 5. From Memory Technology to Device-Level Computing
+
+A further research direction goes beyond the organization of memory and considers the physical devices themselves.
+
+The relevant question becomes:
+
+> **Can the physical characteristics of devices traditionally associated with memory technologies be exploited as part of the computational substrate?**
+
+This creates a distinction between:
+
+```text
+Memory as storage
+```
+
+and:
+
+```text
+Memory device as computational element
+```
+
+Under this model, the physical characteristics of the device may influence:
+
+* state representation;
+* switching behavior;
+* persistence;
+* density;
+* parallelism;
+* analog or multi-level behavior;
+* energy characteristics;
+* computational locality.
+
+This direction could include the investigation of technologies such as resistive devices, magnetic devices, memristive structures, and other emerging memory-related devices.
+
+The purpose is not to assume that these devices should replace CMOS logic, but to investigate whether they enable computational structures that are difficult or inefficient to reproduce using conventional digital logic.
+
+---
+
+# 6. Heterogeneous Symbologic Fabrics
+
+The different research directions do not necessarily need to converge into a homogeneous chip.
+
+A future Symbologic architecture could potentially contain different types of computational regions.
+
+For example:
+
+```text
++------------------------------------------------+
+|                Symbologic Fabric               |
+|                                                |
+|  +---------+   +---------+   +---------+       |
+|  |  SRAM   |   |  TCAM   |   |  RRAM   |       |
+|  |  Tile   |   |  Tile   |   |  Tile   |       |
+|  +---------+   +---------+   +---------+       |
+|                                                |
+|  +---------+   +---------+   +---------+       |
+|  | LUT     |   | Pattern |   | Persistent      |
+|  | Tile    |   | Tile    |   | Tile            |
+|  +---------+   +---------+   +---------+       |
+|                                                |
++------------------------------------------------+
+```
+
+Such an architecture would not require every region of the chip to behave identically.
+
+Different physical implementations could be selected according to the computational behavior required by a particular region.
+
+This creates the possibility of a **heterogeneous symbolic computing fabric**.
+
+---
+
+# 7. Independent Research Paths
+
+An important principle of the Symbologic-8 research program is that related technologies should not automatically be treated as components of a single architecture.
+
+Each research direction may develop independently.
+
+For example:
+
+```text
+                 Symbologic Research Space
+                           |
+          +----------------+----------------+
+          |                |                |
+          v                v                v
+      Symbolic         Memory/Device      Multi-State
+      Architecture       Computing        Computing
+          |                |                |
+       LUT / Mesh      SRAM / TCAM        TernaryBreath
+       Routing         MRAM / RRAM        / related work
+          |                |                |
+          v                v                v
+      Independent      Independent        Independent
+      Evaluation      Evaluation         Evaluation
+```
+
+This is particularly relevant to **TernaryBreath**.
+
+TernaryBreath should not be defined as a mandatory co-processor or as a component that must coexist with Symbologic-8.
+
+Instead, it can be treated as an **independent research trajectory** exploring multi-state or alternative computational representations.
+
+It may eventually be possible to investigate interactions between the two systems, but such integration should remain an experimental possibility rather than an architectural assumption.
+
+This preserves the independence of both research directions and allows each to develop according to its own technical merits.
+
+---
+
+# 8. The Possibility of Multiple Future Architectures
+
+The ultimate objective is therefore not necessarily to produce a single definitive Symbologic-8 processor.
+
+Several different processor classes could emerge from the same conceptual starting point.
+
+For example:
+
+```text
+Symbologic-8
+     |
+     +---- Conventional CMOS / LUT architecture
+     |
+     +---- SRAM-based symbolic processor
+     |
+     +---- TCAM-based pattern processor
+     |
+     +---- Non-volatile symbolic processor
+     |
+     +---- RRAM / memristive architecture
+     |
+     +---- Heterogeneous memory fabric
+     |
+     +---- Multi-state architecture
+     |
+     +---- Other emerging device technologies
+```
+
+Some of these branches may eventually prove more useful than others.
+
+Others may reveal characteristics that were not initially anticipated.
+
+The architecture should therefore remain sufficiently abstract to allow these alternatives to be explored without prematurely constraining the design.
+
+---
+
+# 9. A Broader View of Processor Design
+
+This research direction suggests a broader interpretation of what constitutes a processor architecture.
+
+Traditional processor development tends to separate several layers:
+
+```text
+Instruction Set
+      ↓
+Microarchitecture
+      ↓
+Logic
+      ↓
+Transistors
+      ↓
+Memory
+```
+
+Symbologic-8 proposes investigating whether these layers can become more closely related.
+
+In a symbolic computing fabric:
+
+```text
+Symbolic Representation
+          ↕
+Computational Mapping
+          ↕
+Memory Organization
+          ↕
+Physical Device
+```
+
+may form a coupled design space.
+
+The physical implementation can therefore influence the computational properties of the architecture, while the symbolic architecture can influence which physical memory or device characteristics are useful.
+
+This suggests a research paradigm based on **co-design between symbolic architecture and physical computational substrate**.
+
+---
+
+# 10. Experimental Methodology
+
+The different research paths should initially be evaluated independently.
+
+A common symbolic workload can be used as the reference point while the implementation technology is varied.
+
+Potential evaluation parameters include:
+
+* lookup latency;
+* propagation delay;
+* throughput;
+* energy per symbolic operation;
+* memory density;
+* configuration size;
+* reconfiguration time;
+* persistence;
+* pattern-matching capability;
+* number of symbolic states;
+* physical area;
+* routing complexity;
+* scalability.
+
+The objective is not to assume that one technology will dominate all others.
+
+Instead, the objective is to identify which combinations of architecture and physical technology produce meaningful new computational characteristics.
+
+---
+
+# 11. Proposed Research Roadmap
+
+The project can therefore evolve through parallel research branches rather than a strictly linear sequence.
+
+### Stage 1 — Formalize the Symbolic Model
+
+Continue developing the current `0x00–0xFF` symbolic representation and its mapping semantics.
+
+### Stage 2 — Parameterize the Mapping Architecture
+
+Separate the symbolic abstraction from the current Verilog implementation so that alternative mapping structures can be evaluated.
+
+### Stage 3 — Explore Conventional Memory Implementations
+
+Evaluate LUT, SRAM, distributed RAM, and BRAM implementations.
+
+### Stage 4 — Explore Content-Based Architectures
+
+Investigate TCAM-like structures and pattern-oriented symbolic matching.
+
+### Stage 5 — Explore Emerging Memory Devices
+
+Model MRAM, RRAM, memristive and other emerging memory-related technologies.
+
+### Stage 6 — Explore Device-Level Computational Effects
+
+Investigate whether physical properties of emerging devices can be exploited as computational primitives.
+
+### Stage 7 — Independent Multi-State Research
+
+Develop TernaryBreath and related multi-state approaches independently, without requiring integration with Symbologic-8.
+
+### Stage 8 — Evaluate Convergence Opportunities
+
+Only after the independent branches have been evaluated should possible combinations be considered.
+
+Some branches may remain independent.
+
+Others may converge into hybrid architectures.
+
+New branches may also emerge from experimental results.
+
+---
+
+# 12. Research Philosophy
+
+The central principle of this research program is therefore:
+
+> **Do not define the final processor before exploring the available computational substrates.**
+
+Symbologic-8 can provide the initial symbolic abstraction and experimental framework.
+
+From that starting point, multiple architectural and physical paths can be explored.
+
+The most productive implementation may ultimately be:
+
+* a conventional combinatorial architecture;
+* a memory-centric architecture;
+* a content-addressable architecture;
+* a non-volatile architecture;
+* an emerging-device architecture;
+* a heterogeneous combination;
+* or an architecture that has not yet been identified.
+
+The purpose of the framework is to make these possibilities experimentally accessible.
+
+---
+
+# 13. Conclusion
+
+Symbologic-8 can be understood as more than an alternative 8-bit processor organization.
+
+It can serve as an experimental framework for investigating how **symbolic computation, memory architecture, and physical device technology can influence one another**.
+
+The current prototype establishes the fundamental concept: an 8-bit symbol can directly select a predefined action through a combinatorial symbolic mapping structure.
+
+From this foundation, several independent research paths become possible.
+
+One path can investigate new computational organizations.
+
+Another can investigate different memory technologies.
+
+Another can investigate emerging physical devices and their computational properties.
+
+TernaryBreath can independently investigate an alternative multi-state computational paradigm.
+
+These paths do not need to be merged in advance.
+
+Their value lies precisely in keeping the design space open long enough to determine experimentally which approaches offer genuinely different and useful computational characteristics.
+
+The broader proposition is therefore:
+
+> **A future processor may not be defined solely by its instruction architecture or logic organization. Its computational identity may also emerge from the physical characteristics of the memory and devices from which its computational fabric is constructed.**
+
+Symbologic-8 provides a framework in which this possibility can be investigated systematically.
+
+The ultimate result may not be a single new processor architecture, but a family of architectures exploring different relationships between **symbols, computation, memory, and physical devices**.
