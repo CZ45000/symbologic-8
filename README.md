@@ -2150,3 +2150,693 @@ The broader proposition is therefore:
 Symbologic-8 provides a framework in which this possibility can be investigated systematically.
 
 The ultimate result may not be a single new processor architecture, but a family of architectures exploring different relationships between **symbols, computation, memory, and physical devices**.
+
+# Symbologic-8: A Spatial Processor-Memory Architecture Using Conventional CMOS Technology
+
+## Abstract
+
+Symbologic-8 is an architectural concept for a domain-specific processing system in which symbolic data, local memory, state, routing, and computation are spatially integrated into a distributed processing fabric.
+
+The fundamental idea is to use conventional semiconductor technologies — including CMOS logic, SRAM, registers, multiplexers, decoders, comparators, and standard interconnect — to construct a hardware architecture in which memory is not merely a passive storage resource accessed by a processor, but an active part of the computational structure.
+
+The architecture is based on an 8-bit symbolic atom. Each 8-bit value represents the identity of an elementary symbol, such as an alphanumeric character, digit, mathematical operator, punctuation mark, or other application-defined symbolic element. Sequences of these elementary symbols can then be recognized, aggregated, encoded, and transformed into higher-level symbolic structures.
+
+Rather than continuously moving data between a conventional processor and a physically separate memory hierarchy, Symbologic-8 attempts to place portions of the computation directly where the relevant information and rules are stored.
+
+The resulting architecture can be understood as a spatial processor-memory hybrid: computation is performed through the movement and transformation of tokens across a distributed network of memory and logic elements.
+
+---
+
+## 1. The Fundamental Architectural Principle
+
+Conventional computing architectures generally separate three major functions:
+
+1. **Processing**
+2. **Memory**
+3. **Interconnection**
+
+A processor retrieves data from memory, performs an operation, and writes a result back to a storage location.
+
+Symbologic-8 explores a different organization:
+
+> **The location containing a rule or state can also participate directly in the computation.**
+
+Instead of:
+
+**Memory → Processor → Memory**
+
+the architecture can operate conceptually as:
+
+**Token → Local Memory/Rule → Transformation → Routing → Local Memory/Rule → Transformation**
+
+The computation therefore becomes a spatial process.
+
+The objective is not to eliminate conventional processors or memory, but to introduce a computational fabric in which selected classes of operations can be executed through the interaction of distributed memory and logic.
+
+---
+
+## 2. The 8-Bit Symbolic Atom
+
+The lowest-level representation of Symbologic-8 is an 8-bit symbolic atom.
+
+An 8-bit value provides 256 possible elementary symbol identities.
+
+These identities can represent, depending on the application:
+
+* letters
+* digits
+* punctuation
+* mathematical operators
+* control symbols
+* syntax elements
+* application-specific symbols
+
+The important distinction is that the 8-bit value is not intended to contain the complete meaning of a linguistic or symbolic concept.
+
+It represents an **elementary symbolic identity**.
+
+Meaning emerges through:
+
+**symbol + sequence + context + state + relationship**
+
+For example:
+
+`C A S A`
+
+can represent the symbolic sequence corresponding to the word:
+
+`CASA`
+
+The same fundamental mechanism can represent:
+
+`1 2 3`
+
+or:
+
+`A + B`
+
+or more complex symbolic structures.
+
+Therefore, the 8-bit representation provides a stable atomic layer from which arbitrarily longer symbolic structures can be constructed.
+
+---
+
+## 3. From Symbols to Composite Tokens
+
+The architecture does not require every operation to remain at the individual-character level.
+
+Once a sequence has been recognized, it can be encoded as a higher-level computational object.
+
+Conceptually:
+
+**Symbol → Sequence → Recognition → Composite Token**
+
+For example:
+
+`C A S A`
+
+may be recognized as a known symbolic unit and internally represented by a compact identifier such as:
+
+`WORD_ID = 137`
+
+The original symbolic representation is not necessarily lost. The composite token can act as a computational reference to a larger symbolic structure stored elsewhere in the architecture.
+
+This creates two complementary representations:
+
+### Semantic representation
+
+`C → A → S → A`
+
+### Computational representation
+
+`WORD_ID 137`
+
+The first preserves the elementary symbolic structure.
+
+The second can reduce the amount of information that must propagate through the processing fabric.
+
+This mechanism can therefore be considered a form of **symbolic aggregation or computational encoding**, rather than conventional data compression alone.
+
+---
+
+## 4. Stationary Rules and Fluid Tokens
+
+One of the central principles of Symbologic-8 is:
+
+> **Stationary configuration, fluid tokens.**
+
+Rules, states, dictionaries, routing relationships, and transformation functions can remain physically located inside the processing fabric.
+
+Tokens move through that structure.
+
+A simplified processing element can therefore be represented as:
+
+```text
+             +----------------------+
+Token[7:0] ->| Local Lookup / LUT    |
+             |                      |
+State ------>| Context / State       |
+             |                      |
+             | Transformation       |
+             | Routing              |
+             +----------+-----------+
+                        |
+                        v
+                  Next Processing
+                     Element
+```
+
+The local lookup structure may determine:
+
+* the next token
+* the next state
+* the destination
+* whether the token should stop
+* whether the token should be transformed
+* whether a sequence has been recognized
+* whether a composite token should be generated
+
+The token therefore becomes an active entity moving through a preconfigured computational landscape.
+
+---
+
+## 5. Processor-Memory Hybridization
+
+The term "processor-memory hybrid" describes the architectural relationship rather than a new physical semiconductor device.
+
+A conventional memory cell primarily stores information.
+
+A conventional processor primarily transforms information.
+
+Symbologic-8 proposes arranging memory and logic so that the stored information can directly participate in determining the transformation performed on an incoming token.
+
+For example:
+
+```text
+              LOCAL COMPUTATIONAL TILE
+
+       +------------------------------------+
+       |                                    |
+       |   SRAM / LUT                        |
+       |   +----------------------------+   |
+Token --->|  Token/State -> Result      |   |
+       |   +----------------------------+   |
+       |              |                     |
+       |              v                     |
+       |       State Register               |
+       |              |                     |
+       |              v                     |
+       |       Routing Logic                |
+       |          /    |    \               |
+       +---------/-----|-----\--------------+
+                /      |      \
+             Tile A  Tile B  Tile C
+```
+
+The memory structure contains the rules or mappings.
+
+The logic interprets those mappings.
+
+The interconnect transports the resulting token.
+
+Consequently, the distinction between "where the data is stored" and "where the operation occurs" becomes much less rigid.
+
+This is an architectural form of **processing-in-memory / near-memory / spatial computing**, but with the additional concept that the memory contents can define a distributed symbolic computational topology.
+
+---
+
+## 6. Implementation Using Existing Semiconductor Technology
+
+A fundamental objective of Symbologic-8 is that the architecture should not require a fundamentally new transistor technology.
+
+A possible implementation can be constructed from established CMOS components such as:
+
+* CMOS logic gates
+* NAND/NOR gates
+* multiplexers
+* decoders
+* comparators
+* flip-flops
+* registers
+* latches
+* SRAM
+* small LUT structures
+* FIFOs
+* clocking and synchronization circuits
+* conventional on-chip interconnect
+* standard I/O interfaces
+
+A computational tile could therefore be implemented as a combination of:
+
+**SRAM/LUT + registers + combinational logic + routing logic**
+
+The innovation would primarily reside in the **organization and programming of these elements**, rather than in the invention of a new transistor.
+
+This makes the concept compatible, at least in principle, with conventional ASIC and SoC design methodologies.
+
+---
+
+## 7. Spatial Token Processing
+
+Instead of executing a long sequence of instructions, the fabric can transform a token as it moves through specialized regions.
+
+For example:
+
+```text
+Input
+  |
+  v
+[Symbol Decoder]
+  |
+  v
+[Pattern Recognition]
+  |
+  v
+[Dictionary / Encoding]
+  |
+  v
+[Composite Token]
+  |
+  v
+[Semantic Rule Fabric]
+  |
+  +----> Rule A
+  |
+  +----> Rule B
+  |
+  +----> Rule C
+  |
+  v
+[Result]
+```
+
+Each region can be optimized for a particular operation.
+
+The result is a spatial pipeline in which the physical organization of the circuit reflects part of the computational model.
+
+---
+
+## 8. Symbolic Recognition and Encoding
+
+The symbolic layer can also provide an important optimization mechanism.
+
+Instead of processing every character independently throughout the entire system, the architecture can recognize recurring sequences and replace them with compact internal references.
+
+For example:
+
+```text
+C A S A
+   |
+   v
+Pattern Recognition
+   |
+   v
+Composite Symbol
+   |
+   v
+WORD_ID
+```
+
+A dictionary, trie, finite-state structure, or LUT-based recognizer could perform this operation.
+
+The composite token may then travel through the rest of the fabric instead of the original sequence.
+
+This potentially reduces:
+
+* token traffic
+* routing activity
+* number of state transitions
+* memory accesses
+* repeated pattern recognition
+* energy associated with moving redundant symbolic information
+
+The optimization is therefore not simply "compressing data."
+
+It is **changing the computational granularity**.
+
+The hardware can operate on the highest symbolic level that has already been recognized.
+
+---
+
+## 9. Hierarchical Symbolic Processing
+
+Symbologic-8 can consequently be organized as a hierarchy:
+
+```text
+Elementary Symbol
+       |
+       v
+Symbol Sequence
+       |
+       v
+Recognized Word / Token
+       |
+       v
+Composite Structure
+       |
+       v
+Expression / Semantic Structure
+       |
+       v
+Application-Level Operation
+```
+
+At each level, a sequence can potentially become a new computational entity.
+
+The physical 8-bit symbolic atom remains the fundamental representation, while higher-level structures are represented through references, dictionaries, state, and composition.
+
+This allows the architecture to maintain a direct relationship with the original symbolic representation while optimizing the internal computation.
+
+---
+
+## 10. Context-Dependent Interpretation
+
+An important property of the architecture is that the same 8-bit symbol does not necessarily have a single universal interpretation.
+
+Conceptually:
+
+```text
+Output = F(Symbol, State, Context, Position)
+```
+
+Therefore, the same elementary symbol can trigger different operations depending on the state of the processing fabric.
+
+This is particularly relevant to symbolic and language-oriented processing, where interpretation frequently depends on surrounding symbols and previously recognized structures.
+
+A local state register can therefore provide contextual information without requiring the entire context to be transported with every token.
+
+---
+
+## 11. Why Spatial Processing Matters
+
+The architecture is based on the observation that not every computational problem requires the full flexibility of a general-purpose CPU.
+
+Some operations are highly structured.
+
+Examples include:
+
+* pattern recognition
+* lexical analysis
+* syntax recognition
+* symbolic transformation
+* finite-state processing
+* rule engines
+* packet parsing
+* protocol recognition
+* regular-expression-like matching
+* dictionary lookup
+* structured data processing
+
+For these workloads, the computation can potentially be represented as a network of specialized transformations.
+
+The hardware can then be configured so that the data follows the structure of the computation.
+
+Instead of repeatedly executing instructions describing the same procedure, the procedure can be partially embodied in the spatial organization of the processing fabric.
+
+---
+
+## 12. Conventional CPU Integration
+
+Symbologic-8 does not need to replace the CPU.
+
+A practical implementation could operate as a specialized accelerator connected to a conventional processor through an SoC or accelerator interface.
+
+```text
+                 +----------------+
+                 |      CPU       |
+                 +-------+--------+
+                         |
+                  Host Interface
+                         |
+                         v
+              +--------------------+
+              |  Symbologic-8      |
+              |  Accelerator       |
+              |                    |
+              |  Symbol Processing |
+              |  Spatial Fabric    |
+              +--------------------+
+                         |
+                    Result/Data
+```
+
+The CPU can therefore remain responsible for:
+
+* operating-system functions
+* general-purpose computation
+* complex control
+* device management
+* configuration
+* exceptional cases
+
+while Symbologic-8 handles workloads that can be expressed efficiently as spatial symbolic transformations.
+
+---
+
+## 13. A Possible Hardware Tile
+
+A minimal Symbologic-8 tile could conceptually contain:
+
+```text
++------------------------------------------------+
+|                SYMBOLOGIC TILE                 |
+|                                                |
+|  Input Buffer                                  |
+|       |                                        |
+|       v                                        |
+|  +-----------+                                 |
+|  | Token Reg |  8-bit symbolic atom            |
+|  +-----+-----+                                 |
+|        |                                       |
+|        v                                       |
+|  +-----------+       +------------------+      |
+|  | Local LUT |<----->| State Register   |      |
+|  +-----+-----+       +------------------+      |
+|        |                                       |
+|        v                                       |
+|  +-----------+                                 |
+|  | Transform |                                 |
+|  +-----+-----+                                 |
+|        |                                       |
+|        v                                       |
+|  +-----------+                                 |
+|  |  Router   |                                 |
+|  +--+---+----+                                 |
+|     |   |                                      |
++-----+---+--------------------------------------+
+      |   |
+      v   v
+    Tile  Tile
+```
+
+The LUT does not have to be interpreted as a traditional standalone lookup table.
+
+It can function as a local rule memory.
+
+Its contents define how the tile reacts to a particular token and state.
+
+---
+
+## 14. Memory as Computational Configuration
+
+This leads to a central concept of the architecture:
+
+> **Memory contents can become part of the computational topology.**
+
+Changing the contents of a LUT or local dictionary can change the behavior of the fabric without changing the fundamental hardware structure.
+
+The same physical chip could therefore potentially implement different symbolic domains through different configurations.
+
+For example:
+
+```text
+Configuration A
+Language Processing
+
+Configuration B
+Mathematical Symbol Processing
+
+Configuration C
+Protocol Parsing
+
+Configuration D
+Pattern Recognition
+```
+
+The physical CMOS substrate remains the same.
+
+The configuration of the distributed memory and routing structures changes the computational behavior.
+
+---
+
+## 15. The Architectural Hypothesis
+
+The central hypothesis of Symbologic-8 can therefore be summarized as follows:
+
+> **If symbolic data, local memory, state, transformation logic, and routing are spatially integrated, a conventional CMOS chip can be organized as a programmable processor-memory fabric in which portions of computation occur directly within or adjacent to the structures that store the rules required for that computation.**
+
+This does not require a new type of transistor.
+
+It requires a different organization of existing semiconductor building blocks.
+
+The potential benefit is a reduction in the distance — both logically and physically — between data, rules, and computation.
+
+---
+
+## 16. Relationship to Existing Computing Paradigms
+
+Symbologic-8 can be viewed as combining concepts found in several established architectural families:
+
+* **Finite-state machines**, through explicit state transitions
+* **LUT-based computation**, through local mappings
+* **FPGA architectures**, through configurable spatial logic
+* **Processing-in-memory / near-memory computing**, through the proximity of storage and computation
+* **Dataflow architectures**, through movement of data through a computational graph
+* **Network processors**, through token parsing and routing
+* **Content-addressable techniques**, where symbolic identity can determine a local operation
+* **Domain-specific accelerators**, through specialization of the fabric
+
+The proposed architecture combines these principles around a common symbolic-token model.
+
+Its distinctive architectural question is not whether each individual mechanism is new, but whether they can be organized into a coherent spatial symbolic processing substrate.
+
+---
+
+## 17. Physical Feasibility
+
+From a semiconductor perspective, the architecture can be approached using conventional design flows.
+
+A possible development path would be:
+
+```text
+Architectural Model
+       |
+       v
+Cycle-Accurate Simulation
+       |
+       v
+RTL Implementation
+       |
+       v
+FPGA Prototype
+       |
+       v
+ASIC Synthesis
+       |
+       v
+Physical Design
+       |
+       v
+CMOS Fabrication
+```
+
+An FPGA prototype would be particularly useful for validating:
+
+* token movement
+* routing
+* state retention
+* LUT behavior
+* symbolic recognition
+* composite-token generation
+* throughput
+* buffering
+* arbitration
+* backpressure
+* scalability
+
+Only after these properties are validated would an ASIC implementation become meaningful.
+
+---
+
+## 18. The Main Engineering Challenge
+
+The principal challenge is not the existence of the required electronic components.
+
+Those components already exist.
+
+The difficult problem is creating an efficient spatial interconnect and memory organization.
+
+As the number of tiles increases, the architecture must address:
+
+* routing congestion
+* token collisions
+* buffering
+* arbitration
+* synchronization
+* clock distribution
+* fan-out
+* power consumption
+* memory density
+* latency between tiles
+* deadlock avoidance
+* configuration bandwidth
+
+Consequently, the key research question becomes:
+
+> **How efficiently can symbolic computation be mapped onto a physical network of conventional CMOS processing-memory tiles?**
+
+---
+
+## 19. Core Concept
+
+The entire architecture can be reduced to five fundamental principles:
+
+### 1. Symbolic Atom
+
+**8 bits represent the elementary symbolic identity.**
+
+### 2. Composition
+
+**Elementary symbols form sequences and structures.**
+
+### 3. Recognition
+
+**The fabric recognizes meaningful or computationally useful patterns.**
+
+### 4. Encoding
+
+**Recognized structures can be represented by compact composite tokens.**
+
+### 5. Spatial Processing
+
+**Tokens move through distributed memory, state, logic, and routing structures that implement the computation.**
+
+Therefore:
+
+```text
+8-bit Symbol
+     ↓
+Composition
+     ↓
+Recognition
+     ↓
+Encoding
+     ↓
+Composite Token
+     ↓
+Spatial Processing
+     ↓
+Result
+```
+
+---
+
+## 20. Conclusion
+
+Symbologic-8 proposes an architectural approach in which conventional semiconductor technology can be organized to reduce the separation between memory and computation.
+
+The fundamental element is an 8-bit symbolic atom. These atoms can be composed into arbitrary sequences, recognized as higher-level structures, and represented by compact computational tokens.
+
+The resulting tokens can then propagate through a spatial fabric composed of conventional CMOS logic, registers, SRAM/LUT structures, routing elements, and local state.
+
+The architecture therefore does not depend on a fundamentally new transistor or memory technology.
+
+Its objective is instead to use existing semiconductor primitives in a different computational organization:
+
+**memory stores rules, state stores context, logic performs transformations, and interconnect transports symbolic tokens.**
+
+In this model, the physical chip becomes more than a processor connected to memory.
+
+It becomes a **distributed computational memory fabric**, where portions of the memory structure actively participate in defining and executing the computation.
+
+This provides a possible hardware foundation for a class of symbolic, language-oriented, pattern-oriented, and rule-based workloads that can be represented naturally as the transformation and movement of symbolic tokens through space.
