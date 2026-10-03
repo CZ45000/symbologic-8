@@ -3192,3 +3192,326 @@ The central research question is:
 **How efficiently can symbolic computation be mapped onto a distributed network of conventional CMOS processing-memory tiles, while maximizing useful parallelism and minimizing the energy required to move and transform data?**
 
 Symbologic-8 aims to address this question by combining spatial computation, local memory, configurable rules, symbolic aggregation, and token-based dataflow within a single architectural framework.
+
+# Symbologic-8: Distributed Processing with Adjacent Memory
+
+## Concept
+
+Symbologic-8 could evolve from a symbolic processing architecture based on 8-bit data units into a new type of processor architecture in which **processing, local memory, and data movement are closely integrated**.
+
+The basic idea is to organize the processor into multiple specialized processing units. Each unit operates on 8-bit data structures and has access to a small, fast memory located physically or logically close to the processing element.
+
+Instead of continuously moving data between a central processor and a distant memory, each processing unit could keep frequently used data, intermediate results, lookup tables, configurations, and precomputed information locally.
+
+The architecture could therefore be viewed as a distributed collection of small processing-and-memory units connected to a larger storage system.
+
+```text
+                    STORAGE MEMORY
+              Persistent data and results
+                         │
+        ─────────────────┼─────────────────
+        │                │                 │
+        ▼                ▼                 ▼
+
+ ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+ │ Processing  │  │ Processing  │  │ Processing  │
+ │ Unit 1      │  │ Unit 2      │  │ Unit 3      │
+ │    8-bit    │  │    8-bit    │  │    8-bit    │
+ ├─────────────┤  ├─────────────┤  ├─────────────┤
+ │ Local       │  │ Local       │  │ Local       │
+ │ Memory      │  │ Memory      │  │ Memory      │
+ └─────────────┘  └─────────────┘  └─────────────┘
+        │                │                 │
+        └────────────────┼─────────────────┘
+                         │
+                 Local communication
+```
+
+## Specialized Processing Units
+
+An important aspect of this architecture is that the processing units do not necessarily need to be identical.
+
+Different units could be specialized for different classes of operations.
+
+For example:
+
+* a **symbol recognition unit** could contain symbols, patterns, or lookup tables;
+* a **mathematical unit** could contain frequently used mathematical tables and parameters;
+* a **transformation unit** could contain conversion rules and mappings;
+* a **control unit** could contain frequently used instruction sequences or processing rules.
+
+Each unit would have its own local memory containing information specifically useful for its task.
+
+```text
+ ┌──────────────────────────────┐
+ │ Symbol Recognition Unit      │
+ │                              │
+ │  8-bit Processing            │
+ │  +                           │
+ │  Local Symbol Memory         │
+ └──────────────────────────────┘
+
+ ┌──────────────────────────────┐
+ │ Mathematical Unit            │
+ │                              │
+ │  8-bit Processing            │
+ │  +                           │
+ │  Local Tables / Parameters   │
+ └──────────────────────────────┘
+
+ ┌──────────────────────────────┐
+ │ Transformation Unit          │
+ │                              │
+ │  8-bit Processing            │
+ │  +                           │
+ │  Local Rules / Mappings      │
+ └──────────────────────────────┘
+
+                │
+                ▼
+
+       Shared Storage Memory
+```
+
+## Precomputed and Reusable Information
+
+One of the central ideas is to avoid performing the same work repeatedly.
+
+If a particular operation, transformation, lookup, or pattern occurs frequently, the corresponding information could be stored locally in a form that is immediately usable by the processing unit.
+
+Instead of:
+
+```text
+Input
+  ↓
+Calculate
+  ↓
+Calculate again
+  ↓
+Calculate again
+  ↓
+Result
+```
+
+the architecture could allow:
+
+```text
+Input
+  ↓
+Local lookup / processing
+  ↓
+Reusable result
+```
+
+This could be particularly useful for workloads containing repetitive operations or frequently accessed patterns.
+
+The local memory could contain:
+
+* lookup tables;
+* precomputed results;
+* symbolic representations;
+* frequently used constants;
+* transformation rules;
+* configuration data;
+* machine-specific parameters;
+* intermediate results;
+* frequently reused instruction sequences.
+
+The objective would not necessarily be to store every possible result, but to identify information that is sufficiently reusable to justify keeping it close to the processing unit.
+
+## Locality Instead of Constant Data Movement
+
+Traditional processor architectures often depend on moving data between different levels of the memory hierarchy.
+
+Symbologic-8 could explore a different approach: **keeping computation and frequently accessed information physically or logically close together**.
+
+The processing unit would work primarily with its local memory and communicate with other units only when necessary.
+
+This could reduce unnecessary data movement for specific workloads.
+
+The architecture could therefore be organized around three levels:
+
+```text
+              ┌─────────────────────┐
+              │   Storage Memory    │
+              │ Long-term / shared  │
+              └──────────┬──────────┘
+                         │
+                  Data transfer
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+        ▼                ▼                ▼
+   Local Memory     Local Memory     Local Memory
+        │                │                │
+        ▼                ▼                ▼
+   8-bit Unit       8-bit Unit       8-bit Unit
+        │                │                │
+        └──────── Local communication ────┘
+```
+
+The larger storage memory would be responsible for persistent or shared information, while local memories would contain the information required for immediate processing.
+
+## Parallelism
+
+Because the architecture is composed of multiple processing units, independent operations could potentially be executed in parallel.
+
+For example:
+
+```text
+                 Input
+                   │
+          ┌────────┼────────┐
+          ▼        ▼        ▼
+       Unit A    Unit B    Unit C
+       8-bit     8-bit     8-bit
+          │        │        │
+          ▼        ▼        ▼
+       Result A  Result B  Result C
+          │        │        │
+          └────────┼────────┘
+                   ▼
+              Final result
+```
+
+This could make the architecture particularly interesting for workloads that can be decomposed into independent operations.
+
+The actual performance benefit would depend on the workload, communication architecture, memory technology, and synchronization mechanisms.
+
+## Memory as Part of the Processing Architecture
+
+In this concept, memory would not simply be a passive storage component.
+
+Local memory would become an active architectural element that determines how the processor operates.
+
+Different types of memory could potentially be associated with different processing units depending on their requirements.
+
+For example:
+
+* fast volatile memory for frequently accessed working data;
+* associative or lookup-oriented memory for pattern recognition;
+* non-volatile memory for persistent configurations;
+* specialized tables for deterministic transformations.
+
+This creates the possibility of designing processing units around both **computation and the information they need to perform that computation**.
+
+## From Processor to Processing Fabric
+
+The broader vision is therefore not simply a conventional CPU with additional cache.
+
+Symbologic-8 could evolve toward a **distributed processing fabric**, where computation is organized around small processing elements, local memories, and communication paths between them.
+
+Each element could be thought of as a small computational node:
+
+```text
+      ┌───────────────────────────┐
+      │       Processing Node     │
+      │                           │
+      │   8-bit Processing Unit   │
+      │            +              │
+      │       Local Memory        │
+      │            +              │
+      │     Communication Logic   │
+      └─────────────┬─────────────┘
+                    │
+             Local data exchange
+                    │
+      ┌─────────────┴─────────────┐
+      │                           │
+      ▼                           ▼
+ Processing Node             Processing Node
+```
+
+The result would be an architecture in which processing, storage, and communication are considered together rather than as completely separate components.
+
+## Relationship to Existing Architectures
+
+This concept is related to several existing areas of computer architecture, including:
+
+* **in-memory computing**;
+* **processing-in-memory (PIM)**;
+* **near-memory computing**;
+* **dataflow architectures**;
+* **distributed processing**;
+* **scratchpad-based architectures**;
+* **application-specific processors**;
+* **lookup-table-based computation**.
+
+The objective of Symbologic-8 would be to explore how these principles could be combined around small 8-bit processing units and locally stored symbolic information.
+
+The distinctive aspect would therefore not simply be the presence of local memory, but the possibility of designing each processing unit around the **data, rules, and reusable information required by its specific function**.
+
+## Potential Advantages
+
+For suitable workloads, this architecture could potentially provide:
+
+* reduced movement of frequently used data;
+* faster access to local information;
+* reuse of precomputed results;
+* parallel execution of independent operations;
+* specialized processing units;
+* reduced dependence on a single central processing resource;
+* more predictable execution for deterministic workloads;
+* efficient implementation of repetitive symbolic operations.
+
+These advantages are hypotheses to be investigated experimentally rather than assumptions about guaranteed performance.
+
+## Technical Challenges
+
+Several important problems would need to be solved before such an architecture could become a practical processor.
+
+### Communication
+
+The architecture needs an efficient mechanism for transferring information between processing units.
+
+### Synchronization
+
+Multiple units working in parallel require mechanisms for coordinating their operations and preventing inconsistent states.
+
+### Memory Capacity
+
+Local memories are limited. A method is therefore required to determine which information deserves to remain local.
+
+### Data Consistency
+
+If the same information exists in multiple local memories, the architecture must define how updates are propagated.
+
+### Precomputation
+
+Precomputed information can accelerate repetitive workloads, but it also consumes memory. The system therefore needs to determine when precomputation is beneficial.
+
+### Scalability
+
+As the number of processing units increases, the communication network can become a limiting factor.
+
+## Research Direction
+
+The next step for Symbologic-8 could therefore be to move from a single symbolic processing concept toward a modular architecture composed of:
+
+```text
+      Processing Unit
+             +
+        Local Memory
+             +
+     Communication Logic
+             +
+       Shared Storage
+```
+
+Each module could perform a specific class of operations while maintaining the information most frequently required by that operation.
+
+This creates a possible path toward a processor architecture in which **computation happens close to the information required for computation**.
+
+The long-term objective would be to investigate whether this organization can provide measurable advantages in specific embedded, edge, symbolic, control, or deterministic workloads.
+
+Symbologic-8 is therefore best considered an architectural research direction at this stage. Its practical value would need to be demonstrated through simulations, FPGA implementations, benchmarks, and eventually hardware prototypes.
+
+## Conclusion
+
+The central idea is simple:
+
+> **Do not move information unnecessarily when computation can be placed close to the information.**
+
+By combining small 8-bit processing units with adjacent specialized memories, reusable precomputed information, and a larger storage layer, Symbologic-8 could explore an alternative organization of computation in which **processing, memory, and communication form a single coordinated architecture**.
+
+The goal is not simply to create another 8-bit processor, but to investigate whether a processor can be designed as a collection of specialized computational spaces that already contain much of the information required to perform their work.
