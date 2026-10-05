@@ -8577,3 +8577,4176 @@ Only once those properties are established should performance optimization becom
 ---
 
 ## End of Reference Simulator Specification
+
+# Symbologic-8 Benchmark and Evaluation Specification
+
+**Document:** `docs/BENCHMARKS.md`
+**Version:** 0.1
+**Status:** Experimental Research Specification
+**Project:** Symbologic-8
+
+---
+
+## 1. Purpose
+
+This document defines the benchmark and evaluation methodology for Symbologic-8.
+
+The purpose of the benchmark framework is to determine, through reproducible experiments, whether the Symbologic-8 computational model provides measurable advantages, disadvantages, or no significant difference for selected classes of workloads.
+
+The benchmark framework is intentionally neutral.
+
+It must not assume that symbolic spatial computation is superior to conventional computation. It must instead provide measurements capable of supporting or rejecting the underlying research hypotheses.
+
+The benchmark system should therefore answer questions such as:
+
+* Does symbolic assembly reduce the amount of explicit control logic required for certain workloads?
+* Does spatial token movement provide useful computational locality?
+* Does dynamic region formation improve resource utilization?
+* Does symbolic execution introduce excessive routing or synchronization overhead?
+* For which workload classes, if any, does the architecture provide useful performance characteristics?
+* How does the architecture scale as input size, rule count, token density, and spatial complexity increase?
+
+The benchmark suite is therefore part of the scientific definition of Symbologic-8 rather than merely a performance-testing utility.
+
+---
+
+# 2. Research Status
+
+Symbologic-8 is an experimental computational model.
+
+The benchmark suite must distinguish between:
+
+1. **Hypotheses**
+2. **Measured observations**
+3. **Derived metrics**
+4. **Interpretations**
+5. **Validated conclusions**
+
+A benchmark result must never be presented as proof of an architectural advantage unless the experimental methodology supports that conclusion.
+
+The preferred terminology is:
+
+> "The experiment measured..."
+
+rather than:
+
+> "Symbologic-8 is faster..."
+
+unless the comparison has been performed under clearly defined and reproducible conditions.
+
+---
+
+# 3. Fundamental Evaluation Principle
+
+The benchmark framework follows a simple rule:
+
+> Compare complete computational systems performing equivalent tasks, not merely representations.
+
+Binary and symbolic representations are not architectures by themselves.
+
+A conventional CPU, GPU, FPGA, ASIC, or software interpreter may use binary encoding internally while implementing completely different execution models.
+
+Therefore, statements such as:
+
+> "Symbologic-8 is faster than binary"
+
+are scientifically insufficient.
+
+The appropriate comparison is instead:
+
+> "The Symbologic-8 reference implementation was compared against a conventional CPU implementation using the same workload, input, output requirements, and measurement protocol."
+
+Later experiments may compare:
+
+* Symbologic-8 software simulator
+* conventional CPU software
+* SIMD/vector implementation
+* FPGA implementation
+* dedicated Symbologic-8 hardware
+* conventional ASIC implementation
+
+Each comparison must identify the actual system being evaluated.
+
+---
+
+# 4. Benchmark Objectives
+
+The benchmark framework has six primary objectives.
+
+## 4.1 Functional Correctness
+
+Determine whether the Symbologic-8 execution model produces the correct result.
+
+## 4.2 Computational Cost
+
+Measure the amount of symbolic and spatial activity required to obtain the result.
+
+## 4.3 Temporal Cost
+
+Measure execution cycles and wall-clock latency.
+
+## 4.4 Spatial Cost
+
+Measure mesh utilization, routing distance, congestion, and active regions.
+
+## 4.5 Scaling Behavior
+
+Determine how execution characteristics change as workload size increases.
+
+## 4.6 Comparative Evaluation
+
+Compare Symbologic-8 against appropriate conventional implementations.
+
+---
+
+# 5. Benchmark Categories
+
+The initial benchmark suite is divided into nine categories.
+
+| ID  | Category                  |
+| --- | ------------------------- |
+| B01 | Token Movement            |
+| B02 | Symbolic Assembly         |
+| B03 | Integer Arithmetic        |
+| B04 | Expression Evaluation     |
+| B05 | Formal Parsing            |
+| B06 | Pattern Matching          |
+| B07 | Stream Transformation     |
+| B08 | Dynamic Region Allocation |
+| B09 | Mixed Symbolic Workloads  |
+
+These categories are intentionally different.
+
+A system optimized for arithmetic may behave differently from one optimized for symbolic parsing or spatial routing.
+
+---
+
+# 6. B01 — Token Movement
+
+The first benchmark measures the fundamental cost of moving tokens through the mesh.
+
+The simplest operation is:
+
+```text
+A -> B
+```
+
+where `A` and `B` are cells.
+
+More complex variants include:
+
+```text
+A -> B -> C -> D
+```
+
+and:
+
+```text
+A
+|
+B
+|
+C
+|
+D
+```
+
+The benchmark should measure:
+
+* number of hops
+* number of cycles
+* Manhattan distance
+* routing conflicts
+* stalled tokens
+* completed movements
+* average movement latency
+
+---
+
+# 7. B01 Scaling
+
+The token movement benchmark should vary:
+
+* mesh dimensions
+* source/destination distance
+* number of simultaneous tokens
+* token density
+* number of routing conflicts
+
+Example:
+
+```text
+Mesh:       8x8
+Tokens:     1, 8, 32, 64
+Distance:   1, 2, 4, 8
+```
+
+The experiment should determine whether routing cost scales approximately with distance, congestion, or both.
+
+---
+
+# 8. B02 — Symbolic Assembly
+
+The symbolic assembly benchmark evaluates the ability of tokens to form larger structures.
+
+Example:
+
+```text
+1 + 2
+```
+
+may initially be represented as:
+
+```text
+[1] [+] [2]
+```
+
+The execution rules may transform the structure into:
+
+```text
+[3]
+```
+
+The benchmark should record:
+
+* number of tokens
+* number of rule matches
+* number of rule firings
+* token transformations
+* token creations
+* token deletions
+* token movements
+* execution cycles
+
+---
+
+# 9. B02 Scaling
+
+The symbolic assembly benchmark should progressively increase structural complexity.
+
+Example:
+
+```text
+1 + 2
+```
+
+```text
+1 + 2 + 3 + 4
+```
+
+```text
+1 + 2 + 3 + 4 + 5 + 6 + 7 + 8
+```
+
+and eventually:
+
+```text
+((((1 + 2) + 3) + 4) + ... + N)
+```
+
+The purpose is to determine how execution cost relates to structural complexity.
+
+---
+
+# 10. B03 — Integer Arithmetic
+
+Arithmetic is one of the first objectively testable workloads.
+
+The initial benchmark set should contain:
+
+* addition
+* subtraction
+* multiplication
+* division
+* comparison
+* modulo
+
+The smallest benchmark should be:
+
+```text
+12 + 7 = 19
+```
+
+The same operation should then be tested with increasingly large integers.
+
+---
+
+# 11. Arithmetic Representation
+
+The benchmark must explicitly document the representation used.
+
+For example:
+
+```text
+"12"
+```
+
+could be represented as:
+
+```text
+[1][2]
+```
+
+or as a numeric token:
+
+```text
+[12]
+```
+
+These are not equivalent computational models.
+
+Therefore every benchmark must specify:
+
+```text
+Input Representation
+Token Representation
+Rule Set
+Execution Semantics
+Output Representation
+```
+
+This prevents accidental comparison of different computational problems.
+
+---
+
+# 12. B03 Metrics
+
+Arithmetic benchmarks should record:
+
+* input size in bits
+* input size in symbols
+* number of tokens
+* number of active cells
+* number of rule firings
+* number of transformations
+* number of movements
+* execution cycles
+* wall-clock time
+* memory operations
+
+For hardware implementations, additional metrics may include:
+
+* power
+* energy
+* area
+* clock frequency
+* energy per operation
+
+---
+
+# 13. B04 — Expression Evaluation
+
+Expression evaluation combines symbolic parsing and arithmetic.
+
+Examples:
+
+```text
+1 + 2 * 3
+```
+
+```text
+(1 + 2) * 3
+```
+
+```text
+12 + 7 * 4 - 3
+```
+
+and progressively deeper expressions.
+
+The benchmark should measure the cost of:
+
+1. tokenization
+2. structural recognition
+3. operator precedence
+4. grouping
+5. evaluation
+6. result assembly
+
+This is particularly relevant because Symbologic-8 proposes that structure and execution may be represented in the same spatial token system.
+
+---
+
+# 14. Expression Complexity
+
+Expression benchmarks should vary:
+
+* number of operands
+* operator count
+* nesting depth
+* operator diversity
+* dependency depth
+* token density
+
+Example:
+
+```text
+1 + 2
+```
+
+```text
+1 + 2 * 3
+```
+
+```text
+(1 + 2) * (3 + 4)
+```
+
+```text
+((1 + 2) * (3 + 4)) - ((5 + 6) * 7)
+```
+
+The goal is to determine whether execution cost grows primarily with token count, structural depth, or rule interactions.
+
+---
+
+# 15. B05 — Formal Parsing
+
+Formal parsing is an important benchmark because it directly evaluates symbolic structure.
+
+Example grammar:
+
+```text
+EXPR -> TERM
+EXPR -> EXPR + TERM
+TERM -> NUMBER
+TERM -> TERM * NUMBER
+```
+
+A benchmark input might be:
+
+```text
+12 + 7 * 3
+```
+
+The output is not necessarily a numeric result.
+
+The benchmark may instead measure whether the system correctly constructs the expected structural representation.
+
+---
+
+# 16. Parsing Metrics
+
+Parsing benchmarks should measure:
+
+* input symbols
+* grammar rules
+* successful matches
+* failed matches
+* rule activations
+* structural transformations
+* maximum active region size
+* execution cycles
+* memory consumption
+
+This provides a direct test of the proposed rule-driven symbolic architecture.
+
+---
+
+# 17. B06 — Pattern Matching
+
+Pattern matching evaluates the ability to detect symbolic configurations.
+
+Example:
+
+```text
+A B C D E
+```
+
+Search for:
+
+```text
+B C D
+```
+
+The benchmark can progressively increase:
+
+* input length
+* pattern length
+* number of patterns
+* alphabet size
+* number of simultaneous searches
+
+Spatial variants may search for patterns distributed across multiple cells.
+
+---
+
+# 18. Spatial Pattern Matching
+
+A spatial benchmark may define:
+
+```text
+A B
+C D
+```
+
+and search for:
+
+```text
+A B
+C D
+```
+
+or a transformed configuration such as:
+
+```text
+A C
+B D
+```
+
+The purpose is to evaluate whether spatial relationships can be used directly as computational information.
+
+---
+
+# 19. B07 — Stream Transformation
+
+A stream benchmark processes symbolic data continuously.
+
+Example:
+
+```text
+A B C A B C A B C
+```
+
+with transformation rule:
+
+```text
+A B -> X
+```
+
+The benchmark should measure:
+
+* symbols processed per cycle
+* transformations per cycle
+* latency
+* throughput
+* queue depth
+* routing activity
+* region utilization
+
+This benchmark is particularly relevant to possible coprocessor applications.
+
+---
+
+# 20. B08 — Dynamic Region Allocation
+
+This benchmark directly evaluates one of the principal Symbologic-8 hypotheses.
+
+A logical region is created when a symbolic structure requires additional computational space.
+
+Example:
+
+```text
+Input structure
+       |
+       v
+Region allocation
+       |
+       v
+Local symbolic processing
+       |
+       v
+Region release
+```
+
+The benchmark measures:
+
+* allocation latency
+* release latency
+* region size
+* region utilization
+* fragmentation
+* contention
+* routing overhead
+
+---
+
+# 21. Dynamic Region Stress Test
+
+A stress test should repeatedly allocate and release regions.
+
+Example:
+
+```text
+allocate A
+allocate B
+release A
+allocate C
+allocate D
+release B
+release C
+...
+```
+
+Different allocation strategies should eventually be compared.
+
+Possible strategies include:
+
+* first-fit
+* nearest-free-region
+* load-aware allocation
+* demand-driven allocation
+* centralized allocation
+* distributed allocation
+
+---
+
+# 22. B09 — Mixed Symbolic Workloads
+
+Real applications will likely combine several computational behaviors.
+
+A mixed benchmark may perform:
+
+```text
+Input
+  |
+  v
+Tokenization
+  |
+  v
+Pattern recognition
+  |
+  v
+Structural assembly
+  |
+  v
+Arithmetic
+  |
+  v
+Output
+```
+
+This benchmark is important because an architecture may perform well on isolated primitives but poorly when operations interact.
+
+---
+
+# 23. Baseline Implementations
+
+The benchmark suite should include conventional baselines.
+
+The first baseline should be a standard software implementation running on a conventional CPU.
+
+Possible later baselines include:
+
+* optimized CPU implementation
+* SIMD implementation
+* GPU implementation
+* FPGA implementation
+* conventional hardware accelerator
+* Symbologic-8 FPGA implementation
+* Symbologic-8 ASIC implementation
+
+Each baseline must document its implementation language, compiler, optimization level, hardware, and configuration.
+
+---
+
+# 24. CPU Baseline
+
+The initial CPU baseline should prioritize clarity and correctness.
+
+For example:
+
+```text
+Input
+  |
+Parser
+  |
+Intermediate representation
+  |
+Execution
+  |
+Output
+```
+
+The CPU baseline should not intentionally be inefficient merely to make Symbologic-8 appear advantageous.
+
+A second optimized implementation may be introduced later.
+
+---
+
+# 25. Fair Comparison
+
+A fair benchmark must use:
+
+* identical logical input
+* identical required output
+* equivalent correctness criteria
+* documented representation
+* documented initialization procedure
+* documented execution environment
+
+The comparison must also specify whether preprocessing is included.
+
+For example:
+
+```text
+Parsing included:       YES
+Compilation included:   NO
+Memory allocation:      YES
+Initialization:         separate
+I/O:                    excluded
+```
+
+---
+
+# 26. Cold and Warm Runs
+
+Benchmarks should distinguish between:
+
+### Cold Run
+
+Includes initialization and data structure construction.
+
+### Warm Run
+
+Measures execution after initialization.
+
+Both may be useful.
+
+However, they must never be mixed into a single result without explicit labeling.
+
+---
+
+# 27. Primary Metrics
+
+The initial benchmark framework defines the following metrics.
+
+| Metric               | Description                       |
+| -------------------- | --------------------------------- |
+| `correct`            | Whether output is correct         |
+| `latency_cycles`     | Execution cycles                  |
+| `latency_ns`         | Wall-clock latency                |
+| `throughput`         | Completed workloads per unit time |
+| `tokens_processed`   | Number of processed tokens        |
+| `rule_firings`       | Number of rule executions         |
+| `token_moves`        | Number of token movements         |
+| `active_cells`       | Maximum active cells              |
+| `memory_reads`       | Number of reads                   |
+| `memory_writes`      | Number of writes                  |
+| `routing_conflicts`  | Number of routing conflicts       |
+| `region_allocations` | Number of dynamic allocations     |
+| `region_releases`    | Number of region releases         |
+
+---
+
+# 28. Spatial Metrics
+
+For spatial workloads, additional measurements are required.
+
+### Average Manhattan Distance
+
+```text
+D_avg = total_hops / moved_tokens
+```
+
+### Maximum Routing Distance
+
+```text
+D_max = max(token_route_length)
+```
+
+### Cell Utilization
+
+```text
+U = active_cells / total_cells
+```
+
+### Region Utilization
+
+```text
+U_region = active_cells_in_region / region_capacity
+```
+
+These metrics help distinguish useful spatial computation from routing overhead.
+
+---
+
+# 29. Congestion
+
+Routing congestion must be explicitly measured.
+
+A simple initial metric is:
+
+```text
+C = conflicting_route_attempts / total_route_attempts
+```
+
+More advanced implementations may measure:
+
+* queue depth
+* average waiting cycles
+* maximum waiting cycles
+* link utilization
+* hotspot frequency
+
+---
+
+# 30. Rule Activity
+
+Rule activity is central to Symbologic-8.
+
+The benchmark must record:
+
+```text
+rules_loaded
+rules_matched
+rules_fired
+rules_rejected
+```
+
+This permits analysis of the relationship between rule-set size and execution cost.
+
+---
+
+# 31. Scaling Dimensions
+
+Benchmarks should not scale only by input length.
+
+At minimum, experiments should vary:
+
+### Input Size
+
+```text
+N = 8, 16, 32, 64, 128, ...
+```
+
+### Rule Count
+
+```text
+R = 4, 8, 16, 32, 64, ...
+```
+
+### Mesh Size
+
+```text
+8x8
+16x16
+32x32
+64x64
+```
+
+### Token Density
+
+```text
+10%
+25%
+50%
+75%
+90%
+```
+
+### Structural Depth
+
+```text
+1
+2
+4
+8
+16
+...
+```
+
+---
+
+# 32. Complexity Analysis
+
+Every benchmark should attempt to identify its dominant complexity dimension.
+
+Examples:
+
+```text
+Input complexity
+Rule complexity
+Spatial complexity
+Routing complexity
+Structural complexity
+Memory complexity
+```
+
+A benchmark result should therefore not simply report:
+
+```text
+Execution time = 10 ms
+```
+
+It should provide the context:
+
+```text
+Input symbols = 1,024
+Rules = 32
+Mesh = 32x32
+Token density = 25%
+Execution cycles = ...
+```
+
+---
+
+# 33. Statistical Methodology
+
+Each benchmark should be executed multiple times.
+
+For deterministic simulator experiments, identical configurations should produce identical traces.
+
+For wall-clock measurements, multiple repetitions should be performed.
+
+At minimum, report:
+
+* number of runs
+* median
+* minimum
+* maximum
+* mean
+* standard deviation
+
+For noisy hardware measurements, additional statistical analysis may be required.
+
+---
+
+# 34. Deterministic Experiments
+
+The reference simulator should support deterministic execution.
+
+Given:
+
+```text
+same input
+same rules
+same machine configuration
+same scheduler
+same random seed
+```
+
+the simulator should produce the same execution trace.
+
+This is essential for regression testing.
+
+---
+
+# 35. Benchmark Result Format
+
+A machine-readable result format should be used.
+
+Example:
+
+```json
+{
+  "benchmark": "B03_ADD",
+  "version": "0.1",
+  "implementation": "symbologic8-reference",
+  "input_size": 16,
+  "mesh": [16, 16],
+  "rules": 12,
+  "tokens": 7,
+  "latency_cycles": 31,
+  "rule_firings": 8,
+  "token_moves": 11,
+  "active_cells": 9,
+  "correct": true
+}
+```
+
+The exact schema may evolve.
+
+---
+
+# 36. Benchmark Metadata
+
+Every result should identify:
+
+```text
+benchmark_id
+benchmark_version
+implementation
+implementation_version
+machine_configuration
+rule_set_version
+input_dataset
+timestamp
+compiler
+compiler_version
+hardware
+operating_system
+```
+
+This information is necessary for reproducibility.
+
+---
+
+# 37. Reference Workloads
+
+The initial benchmark suite should contain small workloads that are easy to inspect manually.
+
+Recommended initial workloads:
+
+```text
+ADD_01
+ADD_02
+SUB_01
+MUL_01
+EXPR_01
+PARSE_01
+MATCH_01
+MOVE_01
+REGION_01
+STREAM_01
+```
+
+Small workloads are preferable during the first implementation stage because their traces can be inspected completely.
+
+---
+
+# 38. Golden Results
+
+Each benchmark should have an expected result.
+
+For example:
+
+```text
+Input:
+12 + 7
+
+Expected:
+19
+```
+
+The benchmark should fail if the result differs.
+
+For structural workloads, the expected output may be a canonical symbolic structure rather than a numeric value.
+
+---
+
+# 39. Golden Traces
+
+For selected deterministic tests, the repository should contain expected execution traces.
+
+Example:
+
+```text
+cycle 0: token 1 observed
+cycle 1: rule 4 matched
+cycle 2: token 1 moved
+cycle 3: rule 7 matched
+cycle 4: tokens combined
+cycle 5: result emitted
+```
+
+A future simulator implementation can compare its trace against the golden trace.
+
+This makes changes to execution semantics detectable.
+
+---
+
+# 40. Correctness Before Performance
+
+Performance measurements are meaningless if the implementation does not produce the correct result.
+
+Therefore benchmark execution should follow:
+
+```text
+Run
+ |
+Correct?
+ |---- NO ---> FAIL
+ |
+ YES
+ |
+Measure
+ |
+Store result
+```
+
+A benchmark that produces an incorrect result must never be presented as a successful performance result.
+
+---
+
+# 41. Negative Tests
+
+The benchmark suite should also contain invalid inputs.
+
+Examples:
+
+```text
+1 +
+```
+
+```text
+(1 + 2
+```
+
+```text
+A B C
+```
+
+when the grammar expects:
+
+```text
+A C B
+```
+
+The system should produce a defined failure state rather than undefined behavior.
+
+---
+
+# 42. Stress Tests
+
+Stress benchmarks should intentionally exceed normal operating conditions.
+
+Examples:
+
+* extremely high token density
+* excessive rule count
+* large routing congestion
+* large structural depth
+* frequent region allocation
+* repeated creation/deletion of tokens
+
+The objective is not merely to obtain a high score.
+
+The objective is to identify architectural failure modes.
+
+---
+
+# 43. Saturation Behavior
+
+An important research question is whether the mesh reaches a saturation point.
+
+For example:
+
+```text
+Token density
+      |
+      v
+10% -> 25% -> 50% -> 75% -> 90%
+```
+
+Measurements should reveal whether:
+
+* throughput increases linearly
+* throughput saturates
+* congestion increases sharply
+* latency becomes unstable
+* regions become fragmented
+
+This may reveal practical limits of the architecture.
+
+---
+
+# 44. Dynamic Region Hypothesis
+
+One central hypothesis is:
+
+> Dynamically formed logical regions may provide better adaptation to heterogeneous symbolic workloads than permanently specialized spatial regions.
+
+This is a hypothesis, not an established result.
+
+The benchmark must therefore compare at least:
+
+```text
+Configuration A:
+Homogeneous mesh
+
+Configuration B:
+Fixed specialized regions
+
+Configuration C:
+Dynamic logical regions
+```
+
+using equivalent workloads.
+
+---
+
+# 45. Region Comparison
+
+The comparison should measure:
+
+* execution latency
+* active area
+* routing distance
+* utilization
+* allocation overhead
+* fragmentation
+* throughput
+
+The dynamic system should not receive credit for unused capacity simply because the capacity is available.
+
+---
+
+# 46. Homogeneous Fabric Baseline
+
+The homogeneous fabric represents the simplest Symbologic-8 architecture.
+
+Every cell has the same fundamental capabilities.
+
+Logical specialization is provided by:
+
+* token state
+* rules
+* local state
+* routing
+* dynamic region membership
+
+This architecture provides an important baseline for evaluating the dynamic-region hypothesis.
+
+---
+
+# 47. Fixed-Function Baseline
+
+A fixed-function architecture may contain predefined zones such as:
+
+```text
+Arithmetic
+Parsing
+Routing
+Memory
+Control
+```
+
+This provides a useful alternative.
+
+If dynamic regions do not outperform fixed specialization for relevant workloads, that result is scientifically valuable.
+
+---
+
+# 48. Conventional Baseline
+
+A conventional implementation should be optimized to perform the same logical task.
+
+For example:
+
+```text
+Symbologic-8:
+symbolic tokens + rules + spatial execution
+
+CPU:
+conventional data structures + algorithms
+```
+
+The comparison should focus on the workload rather than on the internal representation.
+
+---
+
+# 49. Energy Evaluation
+
+Energy measurements should only be introduced when appropriate hardware exists.
+
+Possible metrics:
+
+```text
+energy_per_operation
+energy_per_input_symbol
+energy_per_result
+power
+average_power
+peak_power
+```
+
+The simulator must not claim actual silicon energy consumption.
+
+Simulator activity counts may instead be reported as:
+
+```text
+estimated_activity
+```
+
+and clearly labeled as estimates.
+
+---
+
+# 50. FPGA Evaluation
+
+An FPGA implementation can provide an intermediate hardware benchmark.
+
+The benchmark should record:
+
+* LUT utilization
+* FF utilization
+* BRAM utilization
+* DSP utilization
+* maximum clock frequency
+* power estimate
+* measured power where available
+* latency
+* throughput
+
+FPGA results must be kept separate from simulator results.
+
+---
+
+# 51. ASIC Evaluation
+
+ASIC evaluation is a later research stage.
+
+Potential metrics include:
+
+* gate count
+* standard-cell area
+* SRAM area
+* routing area
+* timing
+* power
+* energy per operation
+* clock frequency
+
+These measurements must be based on an actual implementation flow or documented estimation methodology.
+
+No ASIC metric should be inferred merely from the abstract architecture.
+
+---
+
+# 52. Software Simulator Performance
+
+The reference simulator is not intended to represent final hardware performance.
+
+Its primary purpose is:
+
+* semantic validation
+* experimentation
+* trace generation
+* correctness
+* reproducibility
+
+A slow simulator does not imply that the hardware architecture would be slow.
+
+Likewise, a fast simulator does not imply efficient hardware.
+
+---
+
+# 53. Benchmark Reproducibility
+
+Every published result should provide enough information to reproduce the experiment.
+
+At minimum:
+
+```text
+benchmark version
+input
+rules
+machine configuration
+implementation version
+execution parameters
+measurement method
+result
+```
+
+Ideally, the repository should contain:
+
+```text
+benchmark specification
+input dataset
+rule set
+reference output
+runner configuration
+result file
+```
+
+---
+
+# 54. Repository Organization
+
+A possible benchmark directory is:
+
+```text
+benchmarks/
+├── README.md
+├── specs/
+│   ├── B01_TOKEN_MOVEMENT.md
+│   ├── B02_SYMBOLIC_ASSEMBLY.md
+│   ├── B03_INTEGER_ARITHMETIC.md
+│   ├── B04_EXPRESSION_EVALUATION.md
+│   ├── B05_FORMAL_PARSING.md
+│   ├── B06_PATTERN_MATCHING.md
+│   ├── B07_STREAM_TRANSFORMATION.md
+│   ├── B08_DYNAMIC_REGIONS.md
+│   └── B09_MIXED_WORKLOADS.md
+├── inputs/
+├── rules/
+├── expected/
+├── baselines/
+└── results/
+```
+
+---
+
+# 55. Benchmark Runner
+
+A benchmark runner should eventually automate:
+
+```text
+Load benchmark
+       |
+Load rules
+       |
+Load input
+       |
+Initialize implementation
+       |
+Execute
+       |
+Validate output
+       |
+Collect metrics
+       |
+Store result
+```
+
+The same benchmark definition should ideally be executable against multiple implementations.
+
+---
+
+# 56. Cross-Implementation Interface
+
+A common benchmark interface is recommended.
+
+Conceptually:
+
+```text
+run(input, configuration) -> output, metrics
+```
+
+This allows:
+
+```text
+Symbologic8Reference
+CPUReference
+FPGAImplementation
+ASICImplementation
+```
+
+to be evaluated against the same workload definition.
+
+---
+
+# 57. Benchmark Versioning
+
+Benchmark definitions must be versioned.
+
+A change to any of the following may require a new benchmark version:
+
+* input representation
+* expected output
+* rule semantics
+* scoring methodology
+* initialization procedure
+* measurement definition
+
+Example:
+
+```text
+B03_ADD v0.1
+B03_ADD v0.2
+```
+
+Results from different benchmark versions should not be directly combined without qualification.
+
+---
+
+# 58. Acceptance Criteria
+
+A benchmark implementation is considered valid only if:
+
+1. The input is correctly defined.
+2. The expected output is defined.
+3. The execution completes.
+4. The output is correct.
+5. Metrics are recorded.
+6. The configuration is reproducible.
+
+Performance ranking is secondary to these requirements.
+
+---
+
+# 59. Positive Evidence
+
+Evidence supporting a Symbologic-8 hypothesis would require repeated measurements showing a consistent advantage under clearly defined conditions.
+
+For example:
+
+```text
+Same workload
+Same correctness requirement
+Same hardware class
+Repeated experiments
+Consistent lower latency
+```
+
+A single favorable example is not sufficient.
+
+---
+
+# 60. Negative Evidence
+
+Evidence against a hypothesis is equally valuable.
+
+Examples:
+
+* routing overhead dominates execution
+* dynamic allocation costs more than it saves
+* symbolic representation increases memory requirements
+* rule matching scales poorly
+* congestion limits throughput
+* conventional implementations perform better across all tested workloads
+
+Such results should be preserved rather than excluded.
+
+---
+
+# 61. Neutral Evidence
+
+An experiment may show no significant difference.
+
+This is also a valid result.
+
+For example:
+
+```text
+Symbologic-8 ≈ conventional implementation
+```
+
+may indicate that the proposed architecture does not provide a meaningful advantage for that workload.
+
+The benchmark framework must therefore support:
+
+```text
+positive
+neutral
+negative
+```
+
+outcomes.
+
+---
+
+# 62. Avoiding Benchmark Bias
+
+The benchmark suite must not be constructed exclusively from workloads that favor symbolic computation.
+
+It should include workloads where conventional architectures are expected to perform well.
+
+Examples:
+
+* simple arithmetic
+* sequential processing
+* random-access workloads
+* high-density memory workloads
+* heavily branched workloads
+* routing-intensive workloads
+
+This prevents architectural conclusions from being based on cherry-picked examples.
+
+---
+
+# 63. Workload Taxonomy
+
+Each benchmark should be classified by its dominant characteristics.
+
+Example:
+
+| Workload         |  Symbolic |   Spatial | Arithmetic | Routing |   Dynamic |
+| ---------------- | --------: | --------: | ---------: | ------: | --------: |
+| Addition         |      High |    Medium |       High |  Medium |       Low |
+| Parsing          | Very High |    Medium |        Low |  Medium |    Medium |
+| Pattern Match    |      High |      High |        Low |    High |    Medium |
+| Stream Transform |    Medium |    Medium |        Low |  Medium |       Low |
+| Dynamic Region   |      High | Very High |        Low |    High | Very High |
+
+These classifications are descriptive, not performance claims.
+
+---
+
+# 64. Benchmark Matrix
+
+The first benchmark matrix should contain:
+
+| ID  | Workload              | Primary Question                  |
+| --- | --------------------- | --------------------------------- |
+| B01 | Token movement        | Routing cost                      |
+| B02 | Symbolic assembly     | Rule-driven construction          |
+| B03 | Arithmetic            | Computational correctness/cost    |
+| B04 | Expressions           | Structural + arithmetic execution |
+| B05 | Parsing               | Grammar execution                 |
+| B06 | Pattern matching      | Symbolic/spatial matching         |
+| B07 | Stream transformation | Throughput                        |
+| B08 | Dynamic regions       | Adaptive spatial allocation       |
+| B09 | Mixed workload        | End-to-end behavior               |
+
+---
+
+# 65. First Experimental Phase
+
+The first experimental phase should remain small.
+
+Recommended sequence:
+
+```text
+B01 Token Movement
+        |
+        v
+B02 Symbolic Assembly
+        |
+        v
+B03 Integer Arithmetic
+        |
+        v
+B04 Expression Evaluation
+```
+
+Only after these are stable should the project proceed to more complex benchmarks.
+
+---
+
+# 66. Second Experimental Phase
+
+The second phase should introduce:
+
+```text
+B05 Formal Parsing
+B06 Pattern Matching
+B07 Stream Transformation
+```
+
+This phase tests whether the architecture generalizes beyond arithmetic.
+
+---
+
+# 67. Third Experimental Phase
+
+The third phase should focus on:
+
+```text
+B08 Dynamic Regions
+B09 Mixed Workloads
+```
+
+This is where the more ambitious spatial architecture can be evaluated.
+
+---
+
+# 68. Fourth Experimental Phase
+
+Only after the software model is stable should the project move to hardware comparisons.
+
+Possible sequence:
+
+```text
+Reference Simulator
+        |
+        v
+Optimized Simulator
+        |
+        v
+FPGA Prototype
+        |
+        v
+ASIC Feasibility Study
+```
+
+Each stage should preserve the same benchmark definitions whenever possible.
+
+---
+
+# 69. Benchmark Traceability
+
+Every benchmark should be traceable to a specific architectural feature.
+
+Example:
+
+```text
+B01 -> Router
+B02 -> Rule Engine
+B03 -> Symbolic Arithmetic
+B04 -> Structural Execution
+B05 -> Grammar Engine
+B06 -> Pattern Matcher
+B07 -> Streaming
+B08 -> Region Manager
+B09 -> Complete Machine
+```
+
+This makes it easier to identify the source of observed performance characteristics.
+
+---
+
+# 70. Benchmark-to-Architecture Mapping
+
+The benchmark framework should eventually allow results to be mapped back to:
+
+```text
+Language
+   |
+   v
+Rules
+   |
+   v
+Abstract Machine
+   |
+   +--> Token Engine
+   +--> Matcher
+   +--> Router
+   +--> Region Manager
+   +--> Memory
+   |
+   v
+Execution
+```
+
+This is important because an observed bottleneck should ideally be attributable to a specific architectural mechanism.
+
+---
+
+# 71. Bottleneck Classification
+
+Observed bottlenecks should be classified as:
+
+```text
+COMPUTE
+ROUTING
+MEMORY
+MATCHING
+SYNCHRONIZATION
+REGION_ALLOCATION
+REPRESENTATION
+CONTROL
+```
+
+Example:
+
+```text
+B06 Pattern Matching
+Primary bottleneck: MATCHING
+Secondary bottleneck: ROUTING
+```
+
+---
+
+# 72. Benchmark Reports
+
+A benchmark report should contain at least:
+
+```text
+Benchmark
+Version
+Implementation
+Configuration
+Input
+Expected Output
+Actual Output
+Correctness
+Latency
+Throughput
+Rule Activity
+Spatial Activity
+Memory Activity
+Notes
+```
+
+---
+
+# 73. Example Report
+
+Example:
+
+```text
+Benchmark: B03_ADD
+Version: 0.1
+
+Input:
+12 + 7
+
+Expected:
+19
+
+Actual:
+19
+
+Correct:
+YES
+
+Mesh:
+8 x 8
+
+Rules:
+12
+
+Tokens:
+7
+
+Cycles:
+31
+
+Rule Firings:
+8
+
+Token Movements:
+11
+
+Active Cells:
+9
+```
+
+The actual values above are illustrative only.
+
+They must not be interpreted as measured Symbologic-8 performance.
+
+---
+
+# 74. Research Questions
+
+The benchmark framework should progressively answer the following questions.
+
+### Q1
+
+Can symbolic assembly represent and execute basic arithmetic correctly?
+
+### Q2
+
+What is the cost of token movement relative to useful computation?
+
+### Q3
+
+How does rule-set size affect execution?
+
+### Q4
+
+How does token density affect routing?
+
+### Q5
+
+Does dynamic region allocation improve utilization?
+
+### Q6
+
+Does dynamic allocation introduce excessive overhead?
+
+### Q7
+
+Which workload classes benefit most from spatial symbolic execution?
+
+### Q8
+
+Which workload classes are better served by conventional architectures?
+
+### Q9
+
+Does the architecture scale with increasing input complexity?
+
+### Q10
+
+Can the software model be mapped efficiently onto FPGA hardware?
+
+---
+
+# 75. What Would Constitute a Meaningful Result?
+
+A meaningful result is not necessarily:
+
+```text
+Symbologic-8 is faster.
+```
+
+A meaningful result could instead be:
+
+```text
+For workloads characterized by high symbolic locality and repeated
+structural matching, Symbologic-8 demonstrates a measurable reduction
+in execution latency under the tested hardware configuration.
+```
+
+Or:
+
+```text
+Dynamic regions reduce active-cell usage but introduce allocation
+overhead that eliminates the latency advantage.
+```
+
+Both are useful scientific findings.
+
+---
+
+# 76. What Would Not Constitute Strong Evidence?
+
+The following are insufficient by themselves:
+
+* a single toy example
+* an unoptimized conventional baseline
+* comparison against an unspecified "binary system"
+* simulator speed used as a proxy for hardware speed
+* theoretical transistor estimates without implementation
+* selected examples with no negative controls
+* results without reproducible configurations
+
+---
+
+# 77. Benchmark Discipline
+
+The benchmark process should follow:
+
+```text
+Define
+  |
+Implement
+  |
+Validate
+  |
+Measure
+  |
+Repeat
+  |
+Compare
+  |
+Analyze
+  |
+Publish
+```
+
+The order matters.
+
+Performance optimization must not precede semantic validation.
+
+---
+
+# 78. Minimum Viable Benchmark Suite
+
+The minimum useful benchmark suite is:
+
+```text
+B01 Token Movement
+B02 Symbolic Assembly
+B03 Integer Addition
+B04 Expression Evaluation
+B05 Pattern Matching
+B08 Dynamic Region Allocation
+```
+
+This subset is sufficient to begin evaluating the fundamental architecture.
+
+---
+
+# 79. Minimum Viable Comparison
+
+The first meaningful comparison should be:
+
+```text
+Symbologic-8 Reference Simulator
+        vs.
+Conventional CPU Software
+```
+
+using:
+
+```text
+same input
+same logical output
+same correctness criteria
+documented representations
+repeatable execution
+```
+
+This comparison should be treated as a baseline, not as the final hardware comparison.
+
+---
+
+# 80. Future Benchmark Extensions
+
+Future versions may include:
+
+* graph workloads
+* finite-state processing
+* regular-expression matching
+* symbolic search
+* compiler front-end workloads
+* protocol parsing
+* data transformation
+* event processing
+* neural-symbolic workloads
+* hardware-in-the-loop benchmarks
+
+These should only be added when the underlying execution semantics are sufficiently defined.
+
+---
+
+# 81. Relation to Hardware Development
+
+The benchmark suite should eventually become the common reference between software and hardware.
+
+The intended development chain is:
+
+```text
+Language Specification
+        |
+        v
+Abstract Machine
+        |
+        v
+Reference Simulator
+        |
+        v
+Benchmark Suite
+        |
+        v
+FPGA Prototype
+        |
+        v
+ASIC Implementation
+```
+
+A benchmark should ideally survive this entire chain without changing its logical meaning.
+
+---
+
+# 82. Version 0.1 Limitations
+
+This specification does not yet define:
+
+* a complete statistical framework
+* a final benchmark API
+* a complete hardware power model
+* a final compiler
+* a standardized dataset repository
+* a formal confidence-interval methodology
+* a complete multi-implementation execution protocol
+
+These should be introduced as the project matures.
+
+---
+
+# 83. Experimental Principle
+
+The central principle of the benchmark system is:
+
+> The architecture must be allowed to fail.
+
+If a benchmark demonstrates that conventional computation is better for a workload, that result must remain part of the research record.
+
+The purpose of the benchmark suite is therefore not to demonstrate that Symbologic-8 works.
+
+Its purpose is to determine **where, why, and under which conditions it works or does not work**.
+
+---
+
+# 84. Final Position
+
+Symbologic-8 proposes a computational model based on symbolic tokens, explicit assembly rules, state transitions, and spatial execution.
+
+The benchmark framework provides the experimental mechanism required to evaluate that proposal.
+
+The initial research sequence should therefore be:
+
+```text
+Formal Language
+      |
+      v
+Abstract Machine
+      |
+      v
+Reference Simulator
+      |
+      v
+Benchmark Suite
+      |
+      v
+Measured Results
+      |
+      v
+Architecture Revision
+      |
+      v
+FPGA Prototype
+      |
+      v
+ASIC Feasibility
+```
+
+No claim of computational, performance, energy, or hardware superiority should be made before the corresponding measurement exists.
+
+The benchmark suite is therefore not an accessory to Symbologic-8.
+
+It is one of the mechanisms by which the project can determine whether its central architectural hypotheses are valid.
+
+---
+
+## 85. Suggested Repository Integration
+
+The resulting repository structure becomes:
+
+```text
+/
+├── README.md
+├── LICENSE
+│
+├── docs/
+│   ├── SYMBOLOGIC_8_SYMBOLIC_ASSEMBLY_AND_SPATIAL_COMPUTATION.md
+│   ├── LANGUAGE_SPECIFICATION.md
+│   ├── SIMULATOR.md
+│   ├── BENCHMARKS.md
+│   ├── ARCHITECTURE.md
+│   └── HARDWARE_ROADMAP.md
+│
+├── simulator/
+│
+├── language/
+│
+├── benchmarks/
+│   ├── specs/
+│   ├── inputs/
+│   ├── rules/
+│   ├── expected/
+│   ├── baselines/
+│   └── results/
+│
+├── hardware/
+│
+└── experiments/
+```
+
+The next implementation priority after this document should be the creation of the **actual benchmark specifications and machine-readable test vectors**, beginning with `B01_TOKEN_MOVEMENT` and `B02_SYMBOLIC_ASSEMBLY`.
+
+# Symbologic-8 Hardware Roadmap
+
+**Document:** `docs/HARDWARE_ROADMAP.md`
+**Version:** 0.1
+**Status:** Experimental Research Roadmap
+**Project:** Symbologic-8
+
+---
+
+## 1. Purpose
+
+This document defines a possible hardware development roadmap for Symbologic-8.
+
+The purpose of the roadmap is to describe how the symbolic execution model could progress from a software-defined computational model toward experimental hardware implementations.
+
+The roadmap does not assume that a dedicated Symbologic-8 processor is technically or economically justified.
+
+Hardware development should only proceed when the language specification, abstract machine, simulator, and benchmark results provide sufficient evidence that the architecture warrants physical experimentation.
+
+The intended progression is:
+
+```text
+Symbolic Model
+      |
+      v
+Language Specification
+      |
+      v
+Abstract Machine
+      |
+      v
+Reference Simulator
+      |
+      v
+Benchmark Suite
+      |
+      v
+FPGA Prototype
+      |
+      v
+Hardware Characterization
+      |
+      v
+ASIC Feasibility
+      |
+      v
+Possible Silicon Prototype
+```
+
+---
+
+# 2. Hardware Research Status
+
+Symbologic-8 currently represents a research hypothesis rather than a validated processor architecture.
+
+No claims are made at this stage regarding:
+
+* transistor count
+* silicon area
+* power consumption
+* clock frequency
+* fabrication cost
+* performance superiority
+* energy efficiency
+* manufacturing feasibility
+
+These properties must be established through progressively more concrete implementations.
+
+---
+
+# 3. Hardware Development Principle
+
+The central principle is:
+
+> Hardware should implement a validated computational model rather than define the model prematurely.
+
+The project should therefore avoid beginning with transistor-level optimization.
+
+The correct order is:
+
+```text
+Semantics
+   |
+   v
+Architecture
+   |
+   v
+RTL
+   |
+   v
+FPGA
+   |
+   v
+Physical Characterization
+   |
+   v
+ASIC Feasibility
+```
+
+This reduces the risk of optimizing an architecture whose computational model has not yet been demonstrated to be useful.
+
+---
+
+# 4. Hardware Architecture Hypothesis
+
+The current architecture hypothesis is based on a regular computational fabric containing:
+
+* processing cells
+* symbolic tokens
+* local state
+* rule evaluation
+* token movement
+* local memory
+* routing
+* dynamic logical regions
+
+A conceptual representation is:
+
+```text
++-----+-----+-----+-----+
+| C00 | C01 | C02 | C03 |
++-----+-----+-----+-----+
+| C10 | C11 | C12 | C13 |
++-----+-----+-----+-----+
+| C20 | C21 | C22 | C23 |
++-----+-----+-----+-----+
+| C30 | C31 | C32 | C33 |
++-----+-----+-----+-----+
+```
+
+Each cell may participate in different logical computations depending on the current symbolic state and active rules.
+
+The physical fabric may therefore remain relatively homogeneous while the logical function of regions changes dynamically.
+
+---
+
+# 5. Physical Fabric vs Logical Function
+
+The architecture should distinguish between:
+
+### Physical Fabric
+
+The physical resources implemented in silicon or FPGA logic.
+
+Examples:
+
+* cell logic
+* routers
+* registers
+* local memory
+* communication links
+
+### Logical Function
+
+The computational role assigned to those resources.
+
+Examples:
+
+* arithmetic
+* matching
+* parsing
+* routing
+* temporary storage
+* structural assembly
+
+This distinction is fundamental to the Symbologic-8 concept.
+
+A physical cell does not necessarily need to be permanently dedicated to one computational function.
+
+---
+
+# 6. Homogeneous Fabric
+
+The preferred initial hardware hypothesis is a relatively homogeneous processing fabric.
+
+For example:
+
+```text
+CELL
+├── Token State
+├── Rule Evaluation
+├── Local Storage
+├── Router
+└── Control
+```
+
+Repeated across a mesh:
+
+```text
+CELL <-> CELL <-> CELL <-> CELL
+  ^       ^       ^       ^
+  |       |       |       |
+CELL <-> CELL <-> CELL <-> CELL
+```
+
+The objective is to determine experimentally whether this regularity simplifies implementation and enables useful dynamic specialization.
+
+---
+
+# 7. Dynamic Logical Regions
+
+Logical regions may be formed dynamically according to workload requirements.
+
+For example:
+
+```text
++---+---+---+---+---+---+
+| A | A | A |   |   |   |
++---+---+---+---+---+---+
+| A | A | A | B | B |   |
++---+---+---+---+---+---+
+|   |   |   | B | B |   |
++---+---+---+---+---+---+
+|   | C | C | C |   |   |
++---+---+---+---+---+---+
+```
+
+Here:
+
+* region A may perform symbolic matching
+* region B may perform arithmetic
+* region C may perform structural processing
+
+The underlying cells may remain physically similar.
+
+This is an architectural hypothesis that must be validated experimentally.
+
+---
+
+# 8. Hardware Development Stages
+
+The proposed roadmap contains seven stages.
+
+```text
+Stage 0  Formal Model
+Stage 1  Software Reference
+Stage 2  FPGA Architecture
+Stage 3  FPGA Prototype
+Stage 4  Hardware Characterization
+Stage 5  ASIC Feasibility
+Stage 6  Silicon Prototype
+```
+
+Not every stage is guaranteed to occur.
+
+Progression should depend on experimental results.
+
+---
+
+# 9. Stage 0 — Formal Model
+
+The first requirement is a sufficiently precise computational specification.
+
+Required components include:
+
+* token definition
+* symbol definition
+* rule definition
+* state model
+* movement semantics
+* spatial relationships
+* conflict resolution
+* memory semantics
+* region semantics
+* execution cycle
+
+The corresponding documents are:
+
+```text
+LANGUAGE_SPECIFICATION.md
+ARCHITECTURE.md
+SIMULATOR.md
+```
+
+No RTL implementation should become authoritative before these semantics are sufficiently stable.
+
+---
+
+# 10. Stage 1 — Reference Software
+
+The reference simulator provides the executable definition of the architecture.
+
+It should implement:
+
+* mesh
+* cells
+* tokens
+* rules
+* matcher
+* router
+* memory
+* region manager
+* deterministic scheduler
+* event tracing
+
+The simulator should also provide the benchmark interface defined in:
+
+```text
+BENCHMARKS.md
+```
+
+---
+
+# 11. Stage 1 Exit Criteria
+
+Before hardware development begins, the software model should demonstrate:
+
+* deterministic execution
+* reproducible traces
+* correct arithmetic examples
+* correct symbolic assembly
+* correct movement
+* correct pattern matching
+* correct region allocation
+* stable benchmark execution
+
+The objective is not to prove hardware performance.
+
+The objective is to establish that the computational model is sufficiently defined to implement physically.
+
+---
+
+# 12. Stage 2 — FPGA Architecture
+
+FPGA should be the first hardware target.
+
+An FPGA allows rapid experimentation without committing to fabrication.
+
+The initial architecture may map:
+
+```text
+Symbologic Cell
+        |
+        v
+FPGA Logic
+```
+
+and:
+
+```text
+Symbologic Mesh
+        |
+        v
+FPGA Interconnect
+```
+
+The implementation should preserve the abstract semantics of the simulator as closely as practical.
+
+---
+
+# 13. FPGA Cell
+
+A first-generation hardware cell may contain:
+
+```text
++--------------------------------+
+|            CELL                |
+|                                |
+|  Token State                   |
+|  Rule Matcher                  |
+|  Local Registers               |
+|  Local Memory                 |
+|  Router                        |
+|  Control                       |
++--------------------------------+
+```
+
+This is a conceptual decomposition.
+
+The actual FPGA implementation may combine or simplify these blocks.
+
+---
+
+# 14. FPGA Router
+
+The router is expected to be one of the most important hardware components.
+
+A first implementation may support:
+
+```text
+NORTH
+SOUTH
+EAST
+WEST
+LOCAL
+```
+
+A token may therefore transition between adjacent cells:
+
+```text
+      NORTH
+        ^
+        |
+WEST <- CELL -> EAST
+        |
+        v
+      SOUTH
+```
+
+The first implementation should prioritize deterministic behavior over maximum routing performance.
+
+---
+
+# 15. FPGA Routing Strategy
+
+The initial routing algorithm should remain simple.
+
+A Manhattan-style route is an appropriate baseline:
+
+```text
+(x1, y1) -> (x2, y2)
+```
+
+with movement along horizontal and vertical dimensions.
+
+More advanced routing can later investigate:
+
+* adaptive routing
+* congestion-aware routing
+* load-aware routing
+* local route selection
+* distributed route negotiation
+
+The benchmark suite should determine whether additional routing complexity is justified.
+
+---
+
+# 16. FPGA Rule Engine
+
+The rule engine is another critical component.
+
+A conceptual rule may contain:
+
+```text
+MATCH
+CONDITION
+ACTION
+PRIORITY
+```
+
+For example:
+
+```text
+MATCH:
+    TOKEN("+")
+    LEFT(NUMBER)
+    RIGHT(NUMBER)
+
+ACTION:
+    COMBINE
+```
+
+The hardware representation may differ from the symbolic specification.
+
+However, the observable semantics should remain compatible with the reference simulator.
+
+---
+
+# 17. Rule Storage
+
+Possible implementation strategies include:
+
+### Distributed Rule Storage
+
+Rules are stored near processing cells.
+
+Advantages:
+
+* locality
+* parallel access
+* reduced central traffic
+
+Potential disadvantages:
+
+* replication
+* memory overhead
+* rule update complexity
+
+### Central Rule Storage
+
+Rules are stored in a shared memory.
+
+Advantages:
+
+* simpler management
+* reduced duplication
+
+Potential disadvantages:
+
+* bandwidth bottleneck
+* central contention
+* increased routing traffic
+
+### Hybrid Rule Storage
+
+Common rules are centralized while frequently used local rules are replicated.
+
+This may become a later optimization.
+
+---
+
+# 18. Token Representation
+
+The hardware token format must be explicitly defined.
+
+A conceptual token might contain:
+
+```text
+TOKEN
+├── Type
+├── Value
+├── State
+├── Region
+├── Flags
+└── Metadata
+```
+
+The actual bit width is not fixed by this roadmap.
+
+Token encoding should be determined after the language and simulator specifications stabilize.
+
+---
+
+# 19. Token Width
+
+The project should avoid assuming that every token requires a fixed large representation.
+
+Different token classes may have different information requirements.
+
+Possible approaches include:
+
+```text
+Fixed-width token
+Variable-width token
+Compressed token
+Token + metadata
+Token reference + shared data
+```
+
+The benchmark suite should eventually measure the memory and routing consequences of these alternatives.
+
+---
+
+# 20. Local Memory
+
+Local memory is important because spatial computation depends on locality.
+
+Possible implementations include:
+
+* registers
+* distributed RAM
+* FPGA block RAM
+* SRAM
+* small associative structures
+
+The initial prototype should favor simple deterministic memory semantics.
+
+---
+
+# 21. Global Memory
+
+A larger shared memory may be required for:
+
+* program data
+* large symbolic structures
+* external input
+* output
+* rule sets
+* host communication
+
+The architecture should distinguish local memory from global memory.
+
+A conceptual hierarchy is:
+
+```text
+Cell
+ |
+ +-- Local State
+ |
+ +-- Local Memory
+ |
+ +-- Region Memory
+ |
+ +-- Global Memory
+ |
+ +-- Host Memory
+```
+
+---
+
+# 22. Region Manager
+
+The region manager is responsible for logical spatial allocation.
+
+A conceptual interface is:
+
+```text
+ALLOCATE(region_request)
+RELEASE(region_id)
+RESIZE(region_id)
+QUERY(region_id)
+```
+
+The first FPGA implementation should probably use a centralized controller.
+
+A distributed implementation can be investigated later.
+
+---
+
+# 23. Centralized vs Distributed Region Management
+
+### Centralized
+
+```text
+              Region Manager
+              /      |      \
+            Cell    Cell    Cell
+```
+
+Advantages:
+
+* simpler implementation
+* easier debugging
+* deterministic allocation
+
+Disadvantages:
+
+* potential bottleneck
+* scalability limitations
+
+### Distributed
+
+```text
+Cell <-> Cell <-> Cell
+ ^        ^        ^
+ |        |        |
+local region decisions
+```
+
+Advantages:
+
+* scalability
+* locality
+
+Disadvantages:
+
+* significantly more complex coordination
+
+The first hardware prototype should favor simplicity.
+
+---
+
+# 24. Host Interface
+
+A practical Symbologic-8 accelerator should initially operate as a coprocessor.
+
+The host system may provide:
+
+* input data
+* program/rule configuration
+* execution commands
+* output collection
+* status monitoring
+
+Conceptually:
+
+```text
++-------------------+
+| Host CPU / System |
++---------+---------+
+          |
+          |
+     Host Interface
+          |
++---------v---------+
+|   Symbologic-8    |
+|   Processing      |
+|      Fabric       |
++-------------------+
+```
+
+---
+
+# 25. First Host Interface
+
+The first FPGA prototype may use:
+
+* USB
+* Ethernet
+* PCIe
+* vendor-specific debug interface
+
+The choice should depend on development-board availability.
+
+The interface is not part of the fundamental computational model.
+
+It is an integration mechanism.
+
+---
+
+# 26. USB-C Development Model
+
+USB-C may be useful for an external development accelerator.
+
+Conceptually:
+
+```text
+Computer
+   |
+ USB-C
+   |
+ FPGA / Symbologic-8
+```
+
+Potential uses include:
+
+* loading symbolic programs
+* sending input
+* receiving output
+* collecting traces
+* development/debugging
+
+USB-C should initially be considered an interface, not a defining architectural feature.
+
+---
+
+# 27. PCIe Accelerator Model
+
+If FPGA experiments demonstrate useful workloads, a PCIe card may become a more appropriate high-bandwidth interface.
+
+Conceptually:
+
+```text
++--------------------+
+| Host CPU           |
++---------+----------+
+          |
+        PCIe
+          |
++---------v----------+
+| Symbologic-8 Card  |
+|                    |
+| Mesh               |
+| Memory             |
+| Control            |
++--------------------+
+```
+
+PCIe should only be considered after the computational core has been validated.
+
+---
+
+# 28. External Accelerator vs Integrated Processor
+
+Two long-term possibilities exist.
+
+### External Accelerator
+
+```text
+CPU <-> Symbologic-8
+```
+
+Advantages:
+
+* easier adoption
+* independent development
+* suitable for specialized workloads
+
+### Integrated Processor
+
+```text
+CPU + Symbologic Fabric
+```
+
+Advantages:
+
+* lower communication overhead
+* tighter memory integration
+* potentially better energy efficiency
+
+The external accelerator should be investigated first.
+
+---
+
+# 29. FPGA Benchmarking
+
+The FPGA implementation must execute the same logical benchmarks used by the simulator.
+
+The comparison should include:
+
+```text
+Reference Simulator
+        |
+        v
+FPGA
+```
+
+and, where appropriate:
+
+```text
+CPU
+ |
+ +---- Reference
+ |
+ +---- Optimized
+```
+
+This allows the project to separate:
+
+* semantic behavior
+* simulator overhead
+* actual hardware behavior
+
+---
+
+# 30. FPGA Metrics
+
+The FPGA benchmark should record:
+
+### Performance
+
+* clock frequency
+* latency
+* throughput
+* cycles per operation
+
+### Resource Usage
+
+* LUTs
+* flip-flops
+* BRAM
+* DSP blocks
+* routing utilization
+
+### Power
+
+* estimated power
+* measured board power where possible
+
+### Spatial Activity
+
+* active cells
+* routing activity
+* congestion
+* region utilization
+
+---
+
+# 31. Hardware/Simulator Trace Compatibility
+
+The FPGA implementation should ideally produce an execution trace compatible with the reference simulator.
+
+For example:
+
+```text
+SIMULATOR:
+cycle 12
+token 4
+MOVE
+(3,4) -> (3,5)
+```
+
+and:
+
+```text
+FPGA:
+cycle 12
+token 4
+MOVE
+(3,4) -> (3,5)
+```
+
+The exact implementation may differ internally, but externally observable semantics should remain comparable.
+
+This greatly simplifies hardware validation.
+
+---
+
+# 32. Hardware Debugging
+
+The FPGA prototype should include a debug mechanism.
+
+Possible features:
+
+* event tracing
+* token inspection
+* cell state inspection
+* rule activity counters
+* routing counters
+* region state
+* performance counters
+
+Debug functionality may be disabled or reduced in performance configurations.
+
+---
+
+# 33. Performance Counters
+
+Hardware counters should expose quantities such as:
+
+```text
+cycles
+tokens_processed
+rule_matches
+rule_firings
+token_moves
+routing_conflicts
+memory_reads
+memory_writes
+region_allocations
+region_releases
+```
+
+These counters provide the bridge between benchmark definitions and physical hardware behavior.
+
+---
+
+# 34. Stage 3 — FPGA Prototype
+
+The first complete FPGA prototype should implement a small mesh.
+
+A possible target is:
+
+```text
+4 x 4
+```
+
+or:
+
+```text
+8 x 8
+```
+
+The exact size should be determined by resource availability.
+
+The objective is not maximum scale.
+
+The objective is to demonstrate:
+
+```text
+Token
++
+Rule
++
+Movement
++
+Memory
++
+Execution
+```
+
+in physical hardware.
+
+---
+
+# 35. Minimal Hardware Demonstrator
+
+The first demonstrator should implement only the essential operations:
+
+```text
+MOVE
+MATCH
+BIND
+COMBINE
+CREATE
+DELETE
+TRANSFORM
+EMIT
+```
+
+This corresponds closely to the minimum viable simulator.
+
+---
+
+# 36. First Hardware Demonstration
+
+A useful first demonstration would be:
+
+```text
+Input:
+12 + 7
+
+        |
+        v
+
+Tokenization
+
+[1] [2] [+] [7]
+
+        |
+        v
+
+Spatial Assembly
+
+        |
+        v
+
+Arithmetic Rule
+
+        |
+        v
+
+[1] [9]
+
+        |
+        v
+
+Output:
+19
+```
+
+The purpose is not to demonstrate high performance.
+
+The purpose is to demonstrate semantic continuity between the language, simulator, and hardware.
+
+---
+
+# 37. Stage 4 — Hardware Characterization
+
+Once the FPGA implementation is stable, systematic characterization should begin.
+
+Experiments should vary:
+
+* mesh size
+* token density
+* rule count
+* input size
+* routing distance
+* region size
+* memory pressure
+
+The results should be compared against the software simulator.
+
+---
+
+# 38. Model Validation
+
+Hardware experiments may reveal behavior not visible in the simulator.
+
+Examples:
+
+* routing congestion
+* timing bottlenecks
+* memory conflicts
+* resource fragmentation
+* unexpected control overhead
+
+The simulator should then be extended to model relevant behavior.
+
+This creates an iterative cycle:
+
+```text
+Simulator
+    |
+    v
+FPGA
+    |
+    v
+Observation
+    |
+    v
+Model Revision
+    |
+    v
+Simulator
+```
+
+---
+
+# 39. Stage 5 — ASIC Feasibility
+
+ASIC development should begin only if FPGA and benchmark results justify it.
+
+The feasibility study should evaluate:
+
+* process technology
+* area
+* timing
+* power
+* SRAM requirements
+* I/O
+* clocking
+* routing
+* packaging
+* fabrication cost
+
+The result should be a feasibility report rather than an immediate tape-out decision.
+
+---
+
+# 40. Mature Semiconductor Nodes
+
+Symbologic-8 does not necessarily require an advanced semiconductor node.
+
+Potential mature-node technologies may include:
+
+```text
+130 nm
+90 nm
+65 nm
+```
+
+or other available technologies.
+
+Mature nodes may offer:
+
+* lower mask costs
+* mature IP ecosystems
+* simpler manufacturing
+* longer availability
+* potentially favorable analog/I/O characteristics
+
+However, mature nodes are not automatically cheaper, smaller, or lower-power for every design.
+
+The actual economics depend on:
+
+* die area
+* wafer cost
+* yield
+* packaging
+* mask costs
+* SRAM requirements
+* volume
+* foundry availability
+* process-specific design constraints
+
+---
+
+# 41. Why Mature Nodes May Be Relevant
+
+If the Symbologic-8 architecture uses:
+
+* large regular arrays
+* relatively simple cell logic
+* modest clock frequencies
+* significant local memory
+* external accelerator form factors
+
+then a mature process may be a reasonable candidate.
+
+The architecture should therefore not assume that maximum transistor density is automatically the correct optimization target.
+
+---
+
+# 42. ASIC Cell Architecture
+
+A possible ASIC cell may eventually resemble:
+
+```text
++------------------------------------+
+|            SYMBOLOGIC CELL        |
+|                                    |
+|  +----------+   +--------------+   |
+|  | Token    |   | Rule Engine  |   |
+|  | State    |   |              |   |
+|  +----------+   +--------------+   |
+|                                    |
+|  +----------+   +--------------+   |
+|  | Local    |   | Router       |   |
+|  | Memory   |   |              |   |
+|  +----------+   +--------------+   |
+|                                    |
++------------------------------------+
+```
+
+This is a conceptual block diagram only.
+
+The actual RTL must be derived from measured requirements.
+
+---
+
+# 43. SRAM Considerations
+
+Memory may become one of the dominant physical costs.
+
+If every cell contains substantial local memory:
+
+```text
+Cell = Logic + SRAM
+```
+
+the memory array may dominate area.
+
+Therefore experiments should determine:
+
+* required local state
+* average token storage
+* maximum token storage
+* rule storage
+* region metadata
+* global memory requirements
+
+before fixing a physical cell architecture.
+
+---
+
+# 44. Interconnect Considerations
+
+A spatial architecture may shift complexity from computation toward communication.
+
+The ASIC feasibility study must therefore pay particular attention to:
+
+* wire length
+* router area
+* buffering
+* arbitration
+* congestion
+* clock distribution
+* power associated with movement
+
+A theoretically simple cell can become physically expensive if interconnect dominates the design.
+
+---
+
+# 45. Clocking Strategy
+
+Possible approaches include:
+
+### Global synchronous clock
+
+All cells advance together.
+
+Advantages:
+
+* deterministic
+* easy simulation correspondence
+* straightforward debugging
+
+Disadvantages:
+
+* global clock distribution
+* synchronization constraints
+
+### Regional clocking
+
+Different regions operate semi-independently.
+
+Potential benefits:
+
+* local optimization
+* power management
+
+Potential disadvantages:
+
+* synchronization complexity
+
+The initial prototype should use a global synchronous model.
+
+---
+
+# 46. Power Management
+
+If hardware experiments justify further development, power-saving mechanisms may include:
+
+* clock gating
+* idle-cell suppression
+* local power gating
+* dynamic activity reduction
+* adaptive region activation
+
+However, power optimization should not obscure the basic architectural measurements.
+
+---
+
+# 47. Sparse Execution
+
+A potentially important optimization is sparse activation.
+
+If only a small fraction of the mesh is active:
+
+```text
++---+---+---+---+
+|   | A | A |   |
++---+---+---+---+
+|   | A | A |   |
++---+---+---+---+
+|   |   |   |   |
++---+---+---+---+
+```
+
+inactive cells may consume significantly less dynamic power.
+
+This is one reason why active-cell utilization should be measured in the benchmark suite.
+
+---
+
+# 48. Dense Execution
+
+Conversely, workloads may activate most of the mesh.
+
+Example:
+
+```text
++---+---+---+---+
+| A | A | A | A |
++---+---+---+---+
+| A | A | A | A |
++---+---+---+---+
+| A | A | A | A |
++---+---+---+---+
+| A | A | A | A |
++---+---+---+---+
+```
+
+Dense execution may expose:
+
+* routing congestion
+* memory pressure
+* synchronization overhead
+* limited parallelism
+
+Both sparse and dense cases must be evaluated.
+
+---
+
+# 49. Scalability
+
+The architecture should eventually be evaluated at:
+
+```text
+4 x 4
+8 x 8
+16 x 16
+32 x 32
+64 x 64
+```
+
+where practical.
+
+Scaling should not be assumed to be linear.
+
+Possible limiting factors include:
+
+* routing
+* memory
+* control
+* synchronization
+* region management
+
+---
+
+# 50. Multi-Die or Tiled Architectures
+
+If a single die cannot provide sufficient fabric capacity, multiple tiles may be considered.
+
+Conceptually:
+
+```text
++----------+----------+
+| Tile A   | Tile B   |
+|          |          |
++----------+----------+
+| Tile C   | Tile D   |
+|          |          |
++----------+----------+
+```
+
+This introduces another communication layer.
+
+It should therefore only be investigated after single-tile behavior is understood.
+
+---
+
+# 51. Chiplet Possibility
+
+A future implementation might consider chiplets.
+
+For example:
+
+```text
++-----------+-----------+
+| Symbologic| Symbologic|
+| Tile      | Tile      |
++-----------+-----------+
+       \       /
+        Interconnect
+```
+
+This is a long-term option, not a current requirement.
+
+---
+
+# 52. External Memory
+
+Large workloads may require external memory.
+
+Possible interfaces include:
+
+* DDR
+* LPDDR
+* HBM
+* other memory technologies
+
+The correct interface depends on workload characteristics.
+
+The benchmark suite should determine whether Symbologic-8 is primarily:
+
+```text
+compute-bound
+routing-bound
+memory-bound
+```
+
+before selecting a memory architecture.
+
+---
+
+# 53. Host-Coprocessor Architecture
+
+The preferred first practical product concept is an accelerator.
+
+```text
++----------------------+
+| Host CPU             |
+|                      |
+| Application          |
++----------+-----------+
+           |
+           | command/data
+           v
++----------------------+
+| Symbologic-8         |
+| Accelerator          |
+|                      |
+| Symbolic Mesh        |
+| Rule Engine          |
+| Local Memory         |
++----------------------+
+```
+
+This allows conventional software to use Symbologic-8 only where the benchmark results justify it.
+
+---
+
+# 54. Possible Software Stack
+
+A future software stack may look like:
+
+```text
+Application
+     |
+     v
+Symbologic API
+     |
+     v
+Compiler / Assembler
+     |
+     v
+Symbolic Program
+     |
+     v
+Runtime
+     |
+     v
+Driver
+     |
+     v
+Hardware
+```
+
+The exact API is not yet defined.
+
+---
+
+# 55. USB-C Product Path
+
+A development-oriented external device might use:
+
+```text
+USB-C
+  |
+Controller
+  |
+FPGA
+  |
+Symbologic Mesh
+```
+
+This could provide an accessible experimentation platform.
+
+It would be particularly useful for:
+
+* researchers
+* developers
+* benchmark collection
+* educational experimentation
+
+---
+
+# 56. PCIe Product Path
+
+A higher-performance accelerator could use:
+
+```text
+PCIe
+ |
+DMA
+ |
+Host Memory
+ |
+Symbologic-8
+```
+
+This would be appropriate if benchmark results demonstrate workloads requiring high host-device bandwidth.
+
+---
+
+# 57. Productization Criteria
+
+A hardware product should not be proposed merely because an FPGA prototype works.
+
+A credible product case would require evidence of:
+
+* useful workload performance
+* acceptable power
+* acceptable cost
+* reliable software integration
+* reproducible behavior
+* meaningful differentiation
+* sufficiently mature toolchain
+
+---
+
+# 58. Hardware Risk Register
+
+The project should explicitly track hardware risks.
+
+| Risk                     | Potential Impact |
+| ------------------------ | ---------------- |
+| Routing overhead         | High             |
+| Rule matching complexity | High             |
+| Local memory size        | High             |
+| Dynamic region overhead  | High             |
+| Interconnect area        | High             |
+| Synchronization          | Medium/High      |
+| Token storage            | Medium           |
+| Host communication       | Medium           |
+| FPGA resource usage      | Medium           |
+| ASIC manufacturing cost  | High             |
+
+These ratings are preliminary and should be updated with experimental evidence.
+
+---
+
+# 59. Main Architectural Risks
+
+The most important technical risks are likely to be:
+
+### 1. Routing Dominance
+
+Moving tokens may cost more than processing them.
+
+### 2. Rule Matching Cost
+
+Flexible symbolic matching may require substantial hardware.
+
+### 3. Memory Overhead
+
+Token and rule metadata may dominate storage.
+
+### 4. Dynamic Region Overhead
+
+Adaptability may cost more than fixed specialization.
+
+### 5. Synchronization
+
+Parallel symbolic execution may generate excessive coordination requirements.
+
+These risks should guide benchmark development.
+
+---
+
+# 60. Hardware Optimization Principle
+
+Optimization should follow measured bottlenecks.
+
+For example:
+
+```text
+Benchmark
+   |
+   v
+Bottleneck
+   |
+   +--> Router
+   |
+   +--> Matcher
+   |
+   +--> Memory
+   |
+   +--> Region Manager
+   |
+   v
+Architecture Revision
+```
+
+The project should not optimize components merely because they appear theoretically important.
+
+---
+
+# 61. Hardware/Software Co-Design
+
+Symbologic-8 may ultimately require coordinated development of:
+
+* symbolic language
+* compiler
+* runtime
+* architecture
+* hardware
+* benchmark suite
+
+A change to the language may affect:
+
+```text
+Rule representation
+      |
+      v
+Hardware matcher
+      |
+      v
+Memory requirements
+      |
+      v
+Area / power
+```
+
+Therefore architecture and language should evolve together.
+
+---
+
+# 62. FPGA-to-ASIC Transition
+
+Before ASIC implementation, the FPGA architecture should be reviewed.
+
+The following questions should be answered:
+
+* Which components consume most resources?
+* Which operations dominate execution?
+* Which signals dominate routing?
+* Which memories dominate area?
+* Which logic dominates timing?
+* Which features are actually required?
+
+Unused flexibility should be removed where justified.
+
+---
+
+# 63. ASIC Simplification
+
+An ASIC implementation does not necessarily need to reproduce every simulator feature.
+
+The simulator may support:
+
+```text
+many rule types
+dynamic debugging
+full event traces
+large metadata
+```
+
+while hardware may implement only a validated subset.
+
+The important requirement is that the selected subset remains formally defined.
+
+---
+
+# 64. Prototype Silicon
+
+If ASIC feasibility is positive, a small prototype chip may be preferable to a large production device.
+
+For example:
+
+```text
+Small Mesh
++
+Limited Memory
++
+Debug Interface
++
+Performance Counters
+```
+
+The purpose would be architectural validation.
+
+It would not initially be intended as a commercial product.
+
+---
+
+# 65. Silicon Evaluation
+
+A prototype chip should run the same benchmark suite as the simulator and FPGA.
+
+Measurements may include:
+
+* frequency
+* latency
+* throughput
+* power
+* energy
+* area
+* temperature
+* routing activity
+* memory activity
+
+This provides the final link between the abstract model and physical implementation.
+
+---
+
+# 66. Hardware Research Loop
+
+The complete research process becomes:
+
+```text
+Hypothesis
+    |
+    v
+Formal Model
+    |
+    v
+Simulator
+    |
+    v
+Benchmark
+    |
+    v
+FPGA
+    |
+    v
+Measurement
+    |
+    v
+Architecture Revision
+    |
+    +------------------+
+    |                  |
+    +----> Simulator --+
+```
+
+Only after this loop stabilizes should ASIC development be considered.
+
+---
+
+# 67. Recommended Development Sequence
+
+The recommended sequence is:
+
+```text
+1. Finalize language semantics
+2. Finalize abstract machine
+3. Implement reference simulator
+4. Implement benchmark suite
+5. Establish CPU baselines
+6. Identify useful workloads
+7. Implement small FPGA mesh
+8. Validate hardware against simulator
+9. Measure bottlenecks
+10. Optimize architecture
+11. Repeat benchmarks
+12. Perform ASIC feasibility study
+```
+
+---
+
+# 68. Hardware Milestones
+
+Suggested milestones:
+
+### H0 — Formal
+
+Language and machine semantics defined.
+
+### H1 — Simulation
+
+Reference simulator passes canonical tests.
+
+### H2 — Benchmark
+
+Initial benchmark suite operational.
+
+### H3 — FPGA Cell
+
+Single cell executes symbolic operations.
+
+### H4 — FPGA Mesh
+
+Multi-cell mesh executes symbolic workloads.
+
+### H5 — Host Integration
+
+Host can submit workloads and receive results.
+
+### H6 — Characterization
+
+Performance and resource measurements available.
+
+### H7 — ASIC Feasibility
+
+Physical implementation study completed.
+
+### H8 — Silicon Prototype
+
+Optional, depending on evidence and resources.
+
+---
+
+# 69. Exit Criteria
+
+Each milestone should have explicit exit criteria.
+
+For example:
+
+### H3
+
+```text
+MOVE
+MATCH
+COMBINE
+CREATE
+DELETE
+TRANSFORM
+```
+
+work correctly on hardware.
+
+### H4
+
+Multiple cells communicate correctly.
+
+### H5
+
+Host-device execution is reproducible.
+
+### H6
+
+Benchmark results are repeatable.
+
+### H7
+
+ASIC area, timing, power, and cost are estimated using a documented implementation methodology.
+
+---
+
+# 70. No Premature Product Definition
+
+At this stage, Symbologic-8 should not be defined as:
+
+* a CPU replacement
+* a GPU replacement
+* a universal processor
+* an AI accelerator
+* a general-purpose computer
+
+The architecture should first identify workloads where its execution model is demonstrably useful.
+
+---
+
+# 71. Possible Long-Term Position
+
+If experiments produce positive evidence, Symbologic-8 could potentially evolve toward a specialized symbolic accelerator.
+
+Possible application classes might include:
+
+* symbolic parsing
+* pattern recognition
+* structured data processing
+* rule engines
+* event processing
+* protocol processing
+* domain-specific symbolic computation
+
+These are candidate application domains, not established product targets.
+
+---
+
+# 72. Hardware Research Questions
+
+The hardware program should ultimately answer:
+
+### Q1
+
+What is the minimum useful Symbologic-8 cell?
+
+### Q2
+
+How much hardware state does one token require?
+
+### Q3
+
+What is the physical cost of token movement?
+
+### Q4
+
+How expensive is symbolic rule matching?
+
+### Q5
+
+Does dynamic spatial specialization justify its hardware overhead?
+
+### Q6
+
+How does routing scale with mesh size?
+
+### Q7
+
+How much local memory is required?
+
+### Q8
+
+What workloads provide the best utilization?
+
+### Q9
+
+Is a homogeneous fabric physically efficient?
+
+### Q10
+
+Is a mature semiconductor node sufficient?
+
+### Q11
+
+Is an external accelerator more practical than an integrated processor?
+
+### Q12
+
+Can the architecture provide measurable benefits over conventional implementations?
+
+---
+
+# 73. Hardware Roadmap Summary
+
+The complete roadmap is:
+
+```text
+                    SYMBOLOGIC-8
+                         |
+                         v
+              +----------------------+
+              | Formal Specification |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | Reference Simulator  |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | Benchmark Framework  |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | FPGA Prototype       |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | Hardware Measurement |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | ASIC Feasibility     |
+              +----------+-----------+
+                         |
+                         v
+              +----------------------+
+              | Silicon Prototype    |
+              +----------------------+
+```
+
+Every transition should be evidence-driven.
+
+---
+
+# 74. Final Position
+
+The hardware roadmap of Symbologic-8 should not be interpreted as a commitment to fabricate a processor.
+
+It is a structured path for determining whether such a processor would be justified.
+
+The fundamental principle is:
+
+> Do not build silicon to validate an untested hypothesis when simulation and FPGA experimentation can test the hypothesis first.
+
+The preferred development chain is therefore:
+
+```text
+Language
+   ↓
+Abstract Machine
+   ↓
+Simulator
+   ↓
+Benchmarks
+   ↓
+FPGA
+   ↓
+Measurements
+   ↓
+Architecture Revision
+   ↓
+ASIC Feasibility
+   ↓
+Optional Silicon
+```
+
+The most important transition is not from FPGA to ASIC.
+
+It is from **concept to reproducible evidence**.
+
+Only if the experimental results demonstrate that symbolic assembly, spatial execution, dynamic logical regions, and token-based computation provide meaningful benefits for specific workloads should a dedicated ASIC become a justified research objective.
+
+---
+
+## 75. Repository Integration
+
+With this document, the planned documentation layer becomes:
+
+```text
+docs/
+├── SYMBOLOGIC_8_SYMBOLIC_ASSEMBLY_AND_SPATIAL_COMPUTATION.md
+├── LANGUAGE_SPECIFICATION.md
+├── ARCHITECTURE.md
+├── SIMULATOR.md
+├── BENCHMARKS.md
+└── HARDWARE_ROADMAP.md
+```
+
+The corresponding implementation layer remains:
+
+```text
+simulator/
+language/
+benchmarks/
+hardware/
+experiments/
+```
+
+This separates:
+
+* theoretical model
+* language
+* architecture
+* simulation
+* measurement
+* hardware development
+
+while preserving a single experimental chain between them.
