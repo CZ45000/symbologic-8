@@ -1,3 +1,56 @@
+# Architectural Motivation
+
+TernaryBreath begins with a simple physical observation: conventional binary semiconductor technology is highly mature, robust, and widely available, while directly implementing stable multi-level physical logic introduces additional device and circuit complexity.
+
+The initial approach therefore does not assume that ternary information must be represented by three physical voltage levels. Instead, TernaryBreath investigates whether ternary logical states can be represented using conventional binary storage elements.
+
+In the baseline encoding, two physical binary bits form one logical ternary element:
+
+```text
+00 → T0
+01 → T1
+10 → T2
+11 → X
+```
+
+The fourth physical combination is intentionally reserved rather than treated as a fourth computational value. Depending on the architecture, this state may be used for control, exception handling, synchronization, debug, migration, power-management mechanisms, or other experimentally testable functions.
+
+This encoding provides a practical starting point, but it does not by itself establish an architectural advantage. Two binary bits still require physical storage, routing, decoding, and switching resources. Therefore, TernaryBreath does not assume that ternary representation alone will outperform binary computation.
+
+This leads to the second architectural direction of the project: **spatial computation**.
+
+Instead of treating a ternary value only as an element stored and processed inside a conventional linear datapath, TernaryBreath investigates whether computation can be organized spatially, with processing elements distributed across a structured computational fabric.
+
+In this model, computation is not defined only by the sequence of instructions executed by a central datapath. It can also be defined by the position of data, the local relationships between processing elements, the movement of information, and the transformation of states across the fabric.
+
+The purpose of this second direction is not to assume that spatial computation is inherently superior. Spatial organization introduces its own costs, including routing, synchronization, movement, buffering, congestion, area, and control overhead.
+
+The research question therefore becomes broader:
+
+> **Does the potential advantage of TernaryBreath come from ternary representation, from the reserved fourth state, from spatial computation, from their combination, or from none of them?**
+
+The project consequently treats these mechanisms as separable experimental variables rather than as a single assumed solution.
+
+The architecture is evaluated through multiple implementations:
+
+```text
+Conventional Binary Baseline
+            │
+            ├───────────────┐
+            │               │
+     Ternary Datapath   Spatial Processing
+            │               │
+            └───────┬───────┘
+                    │
+              Hybrid System
+```
+
+This separation is fundamental to the research methodology. If an improvement is observed, the experiments should make it possible to determine whether it originates from the ternary representation, from spatial organization, from the reserved state, or from an interaction between these mechanisms.
+
+Conversely, if the additional representation and architectural complexity do not produce a measurable advantage, that result is equally valid.
+
+TernaryBreath is therefore designed as an experimental architecture and benchmarking framework, not as a claim that ternary or spatial computing is universally superior to conventional binary systems.
+
 # Ternary ALU & Spatial Coprocessor
 
 A research-oriented hardware architecture exploring **balanced ternary computation, spatial processing, and their combination on conventional binary FPGA/CMOS infrastructure**.
