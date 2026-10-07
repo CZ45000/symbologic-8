@@ -1,8 +1,30 @@
-# Architectural Motivation
+# TernaryBreath & Symbologic-8
 
-TernaryBreath begins with a simple physical observation: conventional binary semiconductor technology is highly mature, robust, and widely available, while directly implementing stable multi-level physical logic introduces additional device and circuit complexity.
+## An Experimental Framework for Ternary Representation, Spatial Processing, Local Memory, and Specialized Computation
 
-The initial approach therefore does not assume that ternary information must be represented by three physical voltage levels. Instead, TernaryBreath investigates whether ternary logical states can be represented using conventional binary storage elements.
+TernaryBreath and Symbologic-8 explore a common architectural question:
+
+> **Can conventional binary hardware be organized in a different way so that computation, data representation, local memory, and spatial relationships become active parts of the processing architecture?**
+
+The projects approach this question from complementary directions.
+
+**TernaryBreath** investigates ternary logical representation, reserved physical states, ternary datapaths, and spatial processing.
+
+**Symbologic-8** extends this concept toward an architecture based on 8-bit symbolic processing elements, adjacent local memory, specialized processing units, reusable data, and spatial communication between computational nodes.
+
+The objective is not to assume that ternary, spatial, symbolic, or memory-local architectures are inherently superior to conventional binary processors.
+
+Instead, the projects define a common experimental framework in which these architectural mechanisms can be separated, combined, simulated, and eventually validated on FPGA or physical hardware.
+
+---
+
+# 1. Architectural Motivation
+
+Conventional binary semiconductor technology is highly mature, robust, and widely available.
+
+Directly implementing stable multi-level physical logic can introduce additional device and circuit complexity. Therefore, TernaryBreath does not initially assume that ternary information must be represented using three physical voltage levels.
+
+Instead, the project investigates whether ternary logical states can be represented using conventional binary storage elements.
 
 In the baseline encoding, two physical binary bits form one logical ternary element:
 
@@ -13,541 +35,693 @@ In the baseline encoding, two physical binary bits form one logical ternary elem
 11 → X
 ```
 
-The fourth physical combination is intentionally reserved rather than treated as a fourth computational value. Depending on the architecture, this state may be used for control, exception handling, synchronization, debug, migration, power-management mechanisms, or other experimentally testable functions.
+The fourth physical combination is intentionally reserved rather than treated as a fourth computational value.
 
-This encoding provides a practical starting point, but it does not by itself establish an architectural advantage. Two binary bits still require physical storage, routing, decoding, and switching resources. Therefore, TernaryBreath does not assume that ternary representation alone will outperform binary computation.
+Depending on the architecture, this state may be used for:
 
-This leads to the second architectural direction of the project: **spatial computation**.
+* control;
+* exception handling;
+* synchronization;
+* invalid-state detection;
+* debugging;
+* migration;
+* power-management mechanisms;
+* pipeline markers;
+* other experimentally testable functions.
+
+This encoding provides a practical starting point, but it does not by itself establish an architectural advantage.
+
+Two binary bits still require physical storage, routing, decoding, and switching resources.
+
+Therefore, TernaryBreath does not assume that ternary representation alone will outperform binary computation.
+
+This leads to the second architectural direction:
+
+**spatial computation.**
 
 Instead of treating a ternary value only as an element stored and processed inside a conventional linear datapath, TernaryBreath investigates whether computation can be organized spatially, with processing elements distributed across a structured computational fabric.
 
-In this model, computation is not defined only by the sequence of instructions executed by a central datapath. It can also be defined by the position of data, the local relationships between processing elements, the movement of information, and the transformation of states across the fabric.
-
-The purpose of this second direction is not to assume that spatial computation is inherently superior. Spatial organization introduces its own costs, including routing, synchronization, movement, buffering, congestion, area, and control overhead.
-
-The research question therefore becomes broader:
-
-> **Does the potential advantage of TernaryBreath come from ternary representation, from the reserved fourth state, from spatial computation, from their combination, or from none of them?**
-
-The project consequently treats these mechanisms as separable experimental variables rather than as a single assumed solution.
-
-The architecture is evaluated through multiple implementations:
-
-```text
-Conventional Binary Baseline
-            │
-            ├───────────────┐
-            │               │
-     Ternary Datapath   Spatial Processing
-            │               │
-            └───────┬───────┘
-                    │
-              Hybrid System
-```
-
-This separation is fundamental to the research methodology. If an improvement is observed, the experiments should make it possible to determine whether it originates from the ternary representation, from spatial organization, from the reserved state, or from an interaction between these mechanisms.
-
-Conversely, if the additional representation and architectural complexity do not produce a measurable advantage, that result is equally valid.
-
-TernaryBreath is therefore designed as an experimental architecture and benchmarking framework, not as a claim that ternary or spatial computing is universally superior to conventional binary systems.
-
-# Ternary ALU & Spatial Coprocessor
-
-A research-oriented hardware architecture exploring **balanced ternary computation, spatial processing, and their combination on conventional binary FPGA/CMOS infrastructure**.
-
-The project investigates three architectural approaches:
-
-1. **System 1 — Ternary Datapath**
-2. **System 2 — Spatial Coprocessor**
-3. **System 3 — Hybrid Ternary Spatial Coprocessor**
-
-All three systems are evaluated using the same workloads and metrics in order to determine **where ternary encoding helps, where spatial execution helps, and whether combining the two provides a measurable architectural advantage**.
-
-The project does **not** assume that ternary computation is inherently superior to binary computation. Instead, it provides a reproducible simulation framework for measuring the associated trade-offs.
+This concept leads naturally toward Symbologic-8.
 
 ---
 
-# 1. Research Objective
+# 2. From TernaryBreath to Symbologic-8
 
-The central research question is:
+Symbologic-8 can be viewed as a complementary architectural evolution.
 
-> **Where does ternary encoding provide an architectural advantage, where does spatial execution provide an advantage, and does combining both approaches produce a measurable improvement?**
-
-The project therefore separates the investigation into three independent but related architectural paths.
+While TernaryBreath focuses primarily on the representation and spatial organization of computation, Symbologic-8 focuses on the relationship between:
 
 ```text
-                         SAME WORKLOAD
-                              │
-              ┌───────────────┼───────────────┐
-              │               │               │
-              ▼               ▼               ▼
-       ┌────────────┐  ┌────────────┐  ┌────────────┐
-       │  SYSTEM 1  │  │  SYSTEM 2  │  │  SYSTEM 3  │
-       │            │  │            │  │            │
-       │  Ternary   │  │  Spatial   │  │  Hybrid    │
-       │  Datapath  │  │  Coprocess.│  │ Ternary +  │
-       │            │  │            │  │  Spatial   │
-       └─────┬──────┘  └─────┬──────┘  └─────┬──────┘
-             │               │               │
-             └───────────────┼───────────────┘
-                             ▼
-                       SAME METRICS
+Processing
+    +
+Local Memory
+    +
+Reusable Information
+    +
+Spatial Communication
 ```
 
-This experimental separation makes it possible to distinguish:
+The central idea is to avoid repeatedly moving or recomputing information when it can remain close to the processing element that needs it.
 
-* the effect of ternary encoding;
-* the effect of spatial parallelism;
-* the combined effect of both.
+A Symbologic-8 processing node can therefore be considered as:
+
+```text
+┌─────────────────────────────┐
+│     Symbologic-8 Node       │
+│                             │
+│  8-bit Processing Unit      │
+│             +               │
+│       Adjacent Memory       │
+│             +               │
+│    Communication Interface  │
+└─────────────────────────────┘
+```
+
+Multiple nodes can then form a computational fabric.
+
+```text
+┌───────┐   ┌───────┐   ┌───────┐
+│  S8   │───│  S8   │───│  S8   │
+│ + MEM │   │ + MEM │   │ + MEM │
+└───────┘   └───────┘   └───────┘
+    │           │           │
+    ├───────────┼───────────┤
+    │           │           │
+┌───────┐   ┌───────┐   ┌───────┐
+│  S8   │───│  S8   │───│  S8   │
+│ + MEM │   │ + MEM │   │ + MEM │
+└───────┘   └───────┘   └───────┘
+```
+
+The result is no longer simply a processor with a memory hierarchy.
+
+It becomes a collection of computational spaces in which the location of information can become part of the architecture.
 
 ---
 
-# 2. Core Encoding Concept
+# 3. Unified Architectural Model
 
-The fundamental representation uses **two conventional binary bits to represent one balanced ternary digit (trit)**.
-
-Balanced ternary uses three mathematical states:
+The combined research framework can therefore be represented as:
 
 ```text
--1    0    +1
+                    ┌─────────────────────┐
+                    │   Storage Memory    │
+                    │ Persistent / Shared │
+                    └──────────┬──────────┘
+                               │
+                         Data Transfer
+                               │
+             ┌─────────────────┼─────────────────┐
+             │                 │                 │
+             ▼                 ▼                 ▼
+       ┌───────────┐     ┌───────────┐     ┌───────────┐
+       │ Processing│     │ Processing│     │ Processing│
+       │   Node    │     │   Node    │     │   Node    │
+       │           │     │           │     │           │
+       │  8-bit    │     │  8-bit    │     │  8-bit    │
+       │ Processing│     │ Processing│     │ Processing│
+       │     +     │     │     +     │     │     +     │
+       │   Local   │     │   Local   │     │   Local   │
+       │   Memory  │     │   Memory  │     │   Memory  │
+       └─────┬─────┘     └─────┬─────┘     └─────┬─────┘
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                       Local Communication
 ```
 
-Two binary bits provide four physical states:
+This architecture contains several independent research variables:
+
+1. data representation;
+2. processing width;
+3. local memory;
+4. specialized computation;
+5. spatial organization;
+6. communication topology;
+7. reusable/precomputed information;
+8. centralized versus distributed storage.
+
+These variables should be evaluated independently before being combined.
+
+---
+
+# 4. Two Complementary Architectural Paths
+
+The research can therefore be divided into two main paths.
+
+## TernaryBreath
+
+TernaryBreath investigates:
 
 ```text
-00
-01
-10
-11
+Binary Hardware
+       │
+       ▼
+Ternary Representation
+       │
+       ▼
+Ternary Datapath
+       │
+       ▼
+Spatial Ternary Processing
 ```
 
-Three states are assigned to valid ternary data and the fourth is reserved.
+Its primary questions concern:
 
-One possible mapping is:
+* ternary encoding;
+* balanced ternary arithmetic;
+* reserved states;
+* ternary ALUs;
+* spatial execution;
+* ternary/binary comparison.
 
-| Binary encoding |  Meaning | Domain                      |
-| --------------- | -------: | --------------------------- |
-| `00`            |      `0` | Ternary data                |
-| `01`            |     `+1` | Ternary data                |
-| `10`            |     `-1` | Ternary data                |
-| `11`            | Reserved | Control / exceptional state |
+---
 
-The exact numerical mapping may be changed by the implementation. The architectural principle remains the same:
+## Symbologic-8
+
+Symbologic-8 investigates:
 
 ```text
-2 binary bits
-     │
-     ├── 3 valid states → ternary data
-     │
-     └── 1 reserved state → control / metadata
+8-bit Processing
+       │
+       +
+Adjacent Local Memory
+       │
+       +
+Specialized Computation
+       │
+       +
+Reusable Information
+       │
+       ▼
+Spatial Processing Fabric
 ```
 
-The `11` state is **not a fourth mathematical value**.
+Its primary questions concern:
+
+* local memory;
+* processing-memory proximity;
+* symbolic processing;
+* precomputed information;
+* specialized processing elements;
+* data locality;
+* communication between processing nodes;
+* distributed computation.
+
+---
+
+# 5. The Common Research Question
+
+The two projects can ultimately be evaluated under a broader question:
+
+> **Can a processor architecture obtain measurable advantages by combining alternative data representation, spatial computation, specialized processing, and memory located close to the computation?**
+
+This question can be decomposed into several independent hypotheses.
+
+### H1 — Representation
+
+Can alternative logical representations provide useful computational properties?
+
+### H2 — Spatial Organization
+
+Can distributing computation across a spatial fabric improve suitable workloads?
+
+### H3 — Local Memory
+
+Can keeping frequently used information adjacent to processing elements reduce unnecessary data movement?
+
+### H4 — Specialization
+
+Can processing units optimized for specific operations outperform a general-purpose datapath for suitable workloads?
+
+### H5 — Reuse
+
+Can precomputed or frequently reused information reduce repeated computation?
+
+### H6 — Hybrid Architecture
+
+Can these mechanisms provide a measurable advantage when combined?
+
+---
+
+# 6. Ternary Representation
+
+The TernaryBreath baseline uses two physical binary bits per logical trit.
+
+```text
+00 →  0
+01 → +1
+10 → -1
+11 → Reserved
+```
+
+The fourth state is not interpreted as a fourth mathematical value.
 
 It belongs to a separate control or exceptional domain.
 
----
-
-# 3. Reserved Fourth State
-
-The unused encoding state provides an architectural extension point.
-
-Possible uses include:
+This allows the architecture to investigate whether the additional state can be used for:
 
 * invalid-state detection;
-* fault detection;
 * synchronization;
+* control metadata;
 * pipeline markers;
-* valid/invalid signalling;
-* end-of-stream indication;
-* exceptional arithmetic states;
-* handshake information;
-* local control metadata;
-* debugging and observability.
+* fault detection;
+* exception propagation.
+
+The experiments must determine whether the additional state provides sufficient benefit to justify the associated representation and control overhead.
+
+---
+
+# 7. Symbologic-8 Processing Unit
+
+The basic Symbologic-8 element is an 8-bit processing unit associated with adjacent memory.
+
+Conceptually:
+
+```text
+┌───────────────────────────────┐
+│        Symbologic-8           │
+│                               │
+│   ┌───────────────┐           │
+│   │  8-bit ALU /  │           │
+│   │   Processor   │           │
+│   └───────┬───────┘           │
+│           │                   │
+│   ┌───────▼───────┐           │
+│   │ Adjacent Local │           │
+│   │     Memory     │           │
+│   └───────┬───────┘           │
+│           │                   │
+│   Communication Interface     │
+└───────────┬───────────────────┘
+            │
+       Spatial Network
+```
+
+The local memory could contain:
+
+* lookup tables;
+* symbolic patterns;
+* precomputed results;
+* constants;
+* transformation rules;
+* configuration data;
+* intermediate results;
+* frequently reused information.
+
+The purpose is to allow the processing element to access information without repeatedly retrieving it from a distant shared memory.
+
+---
+
+# 8. Specialized Symbologic-8 Units
+
+Symbologic-8 does not necessarily require every processing unit to perform the same operation.
+
+A heterogeneous architecture could contain specialized nodes.
 
 For example:
 
 ```text
-00 → ternary 0
-01 → ternary +1
-10 → ternary -1
-11 → reserved/control
+┌─────────────────────┐
+│ Recognition Unit    │
+│ 8-bit + local data  │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ Mathematical Unit   │
+│ 8-bit + local data  │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ Transformation Unit │
+│ 8-bit + local rules │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ Control Unit        │
+│ 8-bit + local state │
+└─────────────────────┘
 ```
 
-A decoder can therefore distinguish normal data from an exceptional or control condition without treating the reserved state as a valid ternary number.
+This allows the architecture to explore a different model from a conventional homogeneous CPU.
 
-This mechanism is one of the main architectural hypotheses investigated by the project.
-
-It should **not** automatically be interpreted as a hardware-area or performance reduction. The additional decoding and control logic must be measured.
+Instead of asking a general-purpose processor to repeatedly execute the same sequences of instructions, a task could be directed toward a specialized computational node that already contains the information required for that operation.
 
 ---
 
-# 4. Three Architectural Systems
+# 9. Precomputed and Reusable Information
 
-The experimental framework contains three systems.
+A central Symbologic-8 hypothesis is that computation can sometimes be accelerated by storing information that would otherwise need to be reconstructed repeatedly.
 
----
-
-## System 1 — Ternary Datapath
-
-The first system evaluates the ternary representation independently from the spatial architecture.
-
-Its purpose is to determine whether a ternary arithmetic pipeline implemented on binary hardware provides useful computational properties.
-
-Conceptually:
+For example:
 
 ```text
+Conventional:
+
 Input
-  │
-  ▼
-┌─────────────────┐
-│ Ternary Register│
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Ternary ALU /   │
-│ Add Tree        │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Output Register │
-└─────────────────┘
+  ↓
+Compute
+  ↓
+Intermediate result
+  ↓
+Compute again
+  ↓
+Result
 ```
 
-### Main questions
+versus:
 
-* How much latency does the ternary datapath introduce?
-* What is the throughput?
-* How many binary operations are required per ternary operation?
-* What is the storage overhead?
-* How useful is the reserved state?
-* What is the estimated energy per operation?
-* How does the encoding compare with a binary baseline?
+```text
+Symbologic-8:
 
-System 1 isolates the **encoding and arithmetic effects**.
+Input
+  ↓
+Local lookup / local computation
+  ↓
+Reusable information
+  ↓
+Result
+```
+
+This does not imply that storing every possible result is efficient.
+
+The architecture must determine which information has sufficient reuse to justify its memory cost.
+
+Therefore, an important experimental parameter is:
+
+```text
+Reuse frequency
+```
+
+A stored result that is used only once may be less valuable than one used thousands of times.
 
 ---
 
-# 5. System 2 — Spatial Coprocessor
+# 10. Ternary and Symbologic-8 Hybrid
 
-The second system evaluates spatial computation independently from the ternary datapath.
+The two concepts can also be combined.
 
-The initial target is a:
-
-```text
-4 × 4 mesh
-= 16 processing tiles
-```
-
-Conceptually:
+A future architecture could contain:
 
 ```text
-┌────┬────┬────┬────┐
-│ T0 │ T1 │ T2 │ T3 │
-├────┼────┼────┼────┤
-│ T4 │ T5 │ T6 │ T7 │
-├────┼────┼────┼────┤
-│ T8 │ T9 │T10 │T11 │
-├────┼────┼────┼────┤
-│T12 │T13 │T14 │T15 │
-└────┴────┴────┴────┘
+┌───────────────────────────────────┐
+│       Hybrid Processing Node      │
+│                                   │
+│   Ternary Datapath                │
+│          +                        │
+│   8-bit Symbolic Processing      │
+│          +                        │
+│   Adjacent Local Memory           │
+│          +                        │
+│   Spatial Communication           │
+└───────────────────────────────────┘
 ```
 
-Each tile represents a processing element with local computation and communication capabilities.
+A larger fabric could then be constructed:
 
-The purpose is to determine whether **localized parallel execution and mesh-based routing** provide measurable advantages.
+```text
+┌────────┬────────┬────────┬────────┐
+│ T/S/M  │ T/S/M  │ T/S/M  │ T/S/M  │
+├────────┼────────┼────────┼────────┤
+│ T/S/M  │ T/S/M  │ T/S/M  │ T/S/M  │
+├────────┼────────┼────────┼────────┤
+│ T/S/M  │ T/S/M  │ T/S/M  │ T/S/M  │
+├────────┼────────┼────────┼────────┤
+│ T/S/M  │ T/S/M  │ T/S/M  │ T/S/M  │
+└────────┴────────┴────────┴────────┘
 
-System 2 can use a conventional binary datapath.
+T = Ternary processing
+S = Symbologic-8 processing
+M = Adjacent local memory
+```
 
-This is important because it creates a control experiment:
-
-> If the spatial system improves performance, the improvement can be attributed primarily to spatial organization rather than ternary encoding.
+This should be treated as a future research direction rather than an assumption that all mechanisms must be combined.
 
 ---
 
-# 6. System 3 — Hybrid Ternary Spatial Coprocessor
+# 11. Experimental Architecture Matrix
 
-The third system combines the two concepts.
+The research framework can be expanded beyond the original three systems.
 
-Each spatial tile contains a ternary datapath.
+| System                | Representation          | Spatial | Local Memory | Specialization |
+| --------------------- | ----------------------- | ------: | -----------: | -------------: |
+| Binary Baseline       | Binary                  |      No | Conventional |        General |
+| Ternary Datapath      | Ternary                 |      No | Conventional |        General |
+| Spatial Binary        | Binary                  |     Yes |        Local |        General |
+| Symbologic-8          | Binary / 8-bit symbolic |     Yes |     Adjacent |    Specialized |
+| Ternary Spatial       | Ternary                 |     Yes |        Local |        General |
+| Symbologic-8 + Memory | 8-bit symbolic          |     Yes |     Adjacent |    Specialized |
+| Hybrid                | Ternary + symbolic      |     Yes |     Adjacent |    Specialized |
 
-```text
-                 HOST
-                   │
-                   ▼
-        ┌─────────────────────┐
-        │ Hybrid Coprocessor  │
-        │                     │
-        │ ┌────┐ ┌────┐       │
-        │ │ T  │─│ T  │─ ...  │
-        │ └─┬──┘ └─┬──┘       │
-        │   │      │          │
-        │ ┌─┴──┐ ┌─┴──┐       │
-        │ │ T  │─│ T  │       │
-        │ └────┘ └────┘       │
-        │       ...           │
-        └─────────────────────┘
-```
-
-The initial configuration is:
-
-```text
-4 × 4 = 16 ternary processing tiles
-```
-
-This system tests the combined hypothesis:
-
-> **Can ternary datapaths and spatial organization provide complementary benefits when used together?**
+This matrix is particularly important because it prevents the research from attributing an observed improvement to the wrong architectural mechanism.
 
 ---
 
-# 7. Experimental Matrix
+# 12. Experimental Methodology
 
-The primary experiment consists of:
+All architectures should ideally execute equivalent workloads.
+
+The principal comparison becomes:
 
 ```text
-3 architectures × 3 workloads
+                    SAME WORKLOAD
+                         │
+       ┌─────────────────┼──────────────────┐
+       │                 │                  │
+       ▼                 ▼                  ▼
+ Binary Baseline   Ternary System    Symbologic-8
+       │                 │                  │
+       └─────────────────┼──────────────────┘
+                         │
+                         ▼
+                 Spatial Variants
+                         │
+                         ▼
+                   Hybrid System
+                         │
+                         ▼
+                  Common Metrics
 ```
 
-| Architecture                   | Pattern Matching | Rule Engine | Stream Processing |
-| ------------------------------ | ---------------: | ----------: | ----------------: |
-| System 1 — Ternary Datapath    |                ✓ |           ✓ |                 ✓ |
-| System 2 — Spatial Coprocessor |                ✓ |           ✓ |                 ✓ |
-| System 3 — Hybrid              |                ✓ |           ✓ |                 ✓ |
-
-All workloads should use equivalent input sizes and comparable computational requirements wherever possible.
-
-This prevents a workload-specific implementation detail from being mistaken for an architectural advantage.
+This permits the contribution of each architectural mechanism to be studied separately.
 
 ---
 
-# 8. Workload 1 — Pattern Matching
+# 13. Common Workloads
 
-Pattern matching is used to evaluate highly parallel comparison workloads.
+The initial workloads can remain:
 
-Possible applications include:
+### Pattern Matching
 
-* symbolic matching;
-* sequence detection;
-* low-precision classification;
-* local feature comparison;
-* pattern recognition.
+Useful for evaluating:
 
-A conceptual workload is:
+* symbolic comparison;
+* lookup operations;
+* parallel matching;
+* local data reuse.
 
-```text
-Input:
-A B C D E F G ...
+### Rule Engine
 
-Pattern:
-A B C
+Useful for evaluating:
 
-Result:
-match / no-match
-```
-
-The experiment measures:
-
-* comparisons per token;
-* latency;
-* throughput;
-* tile utilization;
-* communication volume;
-* routing distance;
-* operations per token.
-
----
-
-# 9. Workload 2 — Rule Engine
-
-The rule engine evaluates conditional logic.
-
-Example:
-
-```text
-IF A AND B
-    THEN ACTION_1
-
-IF C OR D
-    THEN ACTION_2
-
-IF E AND NOT F
-    THEN ACTION_3
-```
-
-This workload is useful for investigating:
-
-* branching;
+* conditional processing;
 * control propagation;
-* synchronization;
-* reserved-state usage;
-* localized decision making.
+* reserved states;
+* specialized rule units.
 
-The `11` encoding can be evaluated as a possible control/exception state, but any claimed advantage must be supported by simulation or hardware measurements.
+### Stream Processing
 
----
-
-# 10. Workload 3 — Stream Processing
-
-Stream processing evaluates a continuous sequence of tokens.
-
-```text
-Input Stream
-     │
-     ▼
-┌────┐   ┌────┐   ┌────┐   ┌────┐
-│ T0 │ → │ T1 │ → │ T2 │ → │ T3 │
-└────┘   └────┘   └────┘   └────┘
-     │
-     ▼
-Output Stream
-```
-
-This workload emphasizes:
+Useful for evaluating:
 
 * sustained throughput;
 * pipeline utilization;
 * buffering;
-* routing;
-* backpressure;
-* steady-state execution.
+* local communication;
+* memory locality.
 
-Unlike a single-operation benchmark, stream processing makes it possible to evaluate the difference between **latency** and **sustained throughput**.
+Additional workloads can later be introduced specifically for Symbologic-8, such as:
+
+* lookup-heavy algorithms;
+* deterministic transformations;
+* table-driven processing;
+* finite-state machines;
+* protocol parsing;
+* signal/event classification;
+* symbolic conversion;
+* repetitive arithmetic transformations.
 
 ---
 
-# 11. Metrics
+# 14. Common Metrics
 
-All three systems are evaluated using the same metrics.
+All systems should be evaluated using comparable metrics.
 
-## 11.1 Latency
-
-Latency is the number of cycles between input acceptance and result availability.
+## Latency
 
 ```text
-Latency = output_cycle - input_cycle
+Latency =
+output_cycle - input_cycle
 ```
 
-Latency is reported independently from throughput.
-
----
-
-## 11.2 Throughput
-
-Throughput measures completed tokens per cycle.
+## Throughput
 
 ```text
 Throughput =
 completed_tokens / total_cycles
 ```
 
-If a clock frequency is assumed:
+## Operations per Token
 
 ```text
-tokens/s =
-tokens/cycle × clock_frequency
+Operations/token =
+elementary_operations / processed_tokens
 ```
 
-A frequency-derived result is only a projection unless the frequency has been obtained from synthesis or physical hardware.
+## Memory Cost
 
----
+Measure:
 
-## 11.3 Operations per Token
-
-This measures the amount of computation required to process one input token.
-
-```text
-Operations per Token =
-total elementary operations / processed tokens
-```
-
-This metric allows workload-normalized comparisons.
-
----
-
-## 11.4 Memory Cost
-
-The simulator estimates:
-
-* local state;
-* input buffers;
-* output buffers;
-* intermediate storage;
+* local storage;
+* shared storage;
 * metadata;
-* control state.
+* buffering;
+* replicated information.
 
-The distinction between:
+## Data Movement
 
-```text
-logical memory requirement
-```
+For spatial architectures:
 
-and:
-
-```text
-physical FPGA/ASIC memory utilization
-```
-
-must be maintained.
-
-Physical resource usage requires synthesis.
-
----
-
-## 11.5 Routing Cost
-
-For the spatial systems, routing is characterized using:
-
+* number of transfers;
 * number of hops;
-* average Manhattan distance;
+* average distance;
 * maximum distance;
-* communication volume;
-* link utilization;
-* congestion indicators.
+* communication volume.
 
-For two tiles:
+## Locality
+
+Symbologic-8 introduces an additional metric:
 
 ```text
-distance =
-|x1 - x2| + |y1 - y2|
+Locality ratio =
+local accesses / total accesses
 ```
 
-This provides a deterministic baseline for mesh communication.
+This measures how much of the computation can be satisfied by adjacent memory.
+
+## Reuse
+
+Another important metric is:
+
+```text
+Reuse factor =
+number of uses / stored item
+```
+
+This can help determine whether precomputed information actually provides value.
+
+## Tile Utilization
+
+```text
+Utilization =
+active processing time / available processing time
+```
 
 ---
 
-## 11.6 Parallelism
+# 15. Memory Movement as an Architectural Metric
 
-The simulator reports:
+For Symbologic-8, data movement becomes a first-class metric.
 
-* active tiles;
-* tile utilization;
-* parallel operations;
-* speedup;
-* parallel efficiency.
-
-Parallel efficiency is defined as:
+A conventional architecture may repeatedly perform:
 
 ```text
-Efficiency(N) =
-Speedup(N) / N
+Storage
+   ↓
+Processor
+   ↓
+Storage
+   ↓
+Processor
+   ↓
+Storage
 ```
 
-where `N` is the number of processing elements.
+A local-memory architecture attempts to transform this into:
+
+```text
+Storage
+   ↓
+Local Memory
+   ↓
+Processing
+   ↓
+Processing
+   ↓
+Processing
+   ↓
+Storage
+```
+
+The objective is not to eliminate data movement completely.
+
+Instead, it is to reduce unnecessary movement between distant architectural components.
+
+The experiment should therefore measure:
+
+```text
+Bytes transferred
+Transfers/token
+Distance/transfer
+Energy/transfer
+```
+
+where the required parameters are available.
 
 ---
 
-# 12. Scalability
+# 16. Parametric Energy Model
 
-The initial benchmark is:
+Energy should initially remain parametric.
+
+A unified model can be written as:
 
 ```text
-4 × 4
+E_total =
+    E_compute
+  + E_memory
+  + E_routing
+  + E_control
+  + E_data_movement
 ```
 
-but the simulator should support larger configurations:
+For Symbologic-8, this introduces an important additional term:
+
+```text
+E_data_movement
+```
+
+The architecture can then investigate whether local memory reduces the number or distance of expensive transfers.
+
+For example:
+
+```text
+E_memory =
+    N_local_access × E_local_access
+  + N_shared_access × E_shared_access
+```
+
+This permits sensitivity analysis without pretending that the model represents measured silicon power.
+
+---
+
+# 17. Scalability
+
+The initial spatial configuration can remain:
+
+```text
+4 × 4 = 16 processing elements
+```
+
+but the framework should support:
 
 ```text
 2 × 2
@@ -556,394 +730,284 @@ but the simulator should support larger configurations:
 16 × 16
 ```
 
-where computationally practical.
+and potentially larger configurations.
 
-This makes it possible to investigate:
+For Symbologic-8, scaling should additionally investigate:
 
-* scaling efficiency;
-* communication overhead;
-* routing growth;
-* utilization;
-* memory growth;
-* energy growth.
+* local memory capacity;
+* memory replication;
+* communication congestion;
+* reuse;
+* specialized-unit distribution;
+* storage-to-local-memory transfers.
 
-The goal is not to assume linear scaling.
+The key question becomes:
 
-Instead, the simulator should expose where communication and control overhead begin to dominate.
-
----
-
-# 13. Parametric Energy Model
-
-Energy is initially modeled parametrically.
-
-The simulator does **not** claim to measure physical silicon power.
-
-A conceptual model is:
-
-```text
-E_total =
-    E_compute
-  + E_memory
-  + E_routing
-  + E_control
-```
-
-For example:
-
-```text
-E_compute =
-    N_compute × E_compute_op
-
-E_memory =
-    N_memory_access × E_memory_access
-
-E_routing =
-    N_hops × E_hop
-
-E_control =
-    N_control_events × E_control_event
-```
-
-The model parameters can be swept to perform sensitivity analysis.
-
-For example:
-
-```text
-E_compute_op
-E_memory_access
-E_hop
-E_control_event
-```
-
-can be varied independently.
-
-This produces **architectural energy estimates**, not measured silicon power.
+> **At what point does the cost of communication and replicated memory exceed the benefit of local computation?**
 
 ---
 
-# 14. Binary Baseline
+# 18. Binary Baseline
 
-Where possible, the experimental framework should also include a conventional binary baseline.
+A conventional binary implementation remains essential.
 
-This provides an additional reference point:
+The complete comparison should ideally include:
 
 ```text
-Binary baseline
+Binary CPU/Datapath
        │
-       ├── System 1: Ternary datapath
+       ├── Ternary Datapath
        │
-       ├── System 2: Spatial binary datapath
+       ├── Spatial Binary
        │
-       └── System 3: Hybrid ternary spatial datapath
+       ├── Symbologic-8
+       │
+       ├── Ternary Spatial
+       │
+       └── Hybrid
 ```
 
-The purpose is to answer two different questions:
+This prevents the project from comparing only new architectures against one another.
 
-### Question A
-
-Does ternary encoding improve the datapath?
-
-```text
-Binary datapath
-      vs
-Ternary datapath
-```
-
-### Question B
-
-Does spatial organization improve execution?
-
-```text
-Single datapath
-      vs
-Spatial mesh
-```
-
-### Question C
-
-Do the two advantages combine?
-
-```text
-Ternary
-   +
-Spatial
-   =
-Hybrid
-```
-
-This separation is essential for meaningful conclusions.
+The conventional binary baseline establishes the reference point.
 
 ---
 
-# 15. Reproducible Simulation
+# 19. Research Questions
 
-The Python simulator should be deterministic.
+The unified project can investigate the following questions.
 
-Every experiment records:
+### RQ1 — Ternary Representation
 
-```text
-architecture
-mesh dimensions
-encoding
-workload
-token count
-random seed
-clock assumption
-energy parameters
-software version
-```
+Does ternary encoding provide useful computational characteristics when implemented using conventional binary hardware?
 
-Example:
+### RQ2 — Reserved State
 
-```bash
-python run_benchmarks.py \
-    --system hybrid \
-    --mesh 4x4 \
-    --workload pattern_matching \
-    --tokens 100000 \
-    --seed 42
-```
+Can the fourth physical encoding state provide useful control, synchronization, or exception mechanisms?
 
-A complete benchmark may be executed with:
+### RQ3 — Spatial Processing
 
-```bash
-python run_benchmarks.py \
-    --mesh 4x4 \
-    --all-systems \
-    --all-workloads \
-    --tokens 100000 \
-    --seed 42
-```
+Does spatial organization improve suitable workloads?
 
-The simulator should export machine-readable results such as:
+### RQ4 — Local Memory
 
-```text
-CSV
-JSON
-```
+Does placing memory adjacent to processing reduce data movement sufficiently to provide a measurable advantage?
 
-and automatically generate plots.
+### RQ5 — Specialization
+
+Can specialized processing units outperform general-purpose processing for suitable workloads?
+
+### RQ6 — Reuse
+
+How much benefit can be obtained by storing precomputed or frequently reused information?
+
+### RQ7 — Hybridization
+
+Do ternary representation, spatial processing, specialized computation, and local memory provide complementary benefits?
+
+### RQ8 — Scaling
+
+At what point do routing, synchronization, and memory overhead dominate the benefits?
 
 ---
 
-# 16. Expected Output
+# 20. Architectural Hypothesis
 
-The simulation framework should generate comparative figures such as:
-
-### Latency
+The broader architectural hypothesis can be represented as:
 
 ```text
-Latency
-  │
-  │       █
-  │   █   █
-  │   █   █       █
-  └──────────────────
-      S1  S2      S3
+                 DATA REPRESENTATION
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+          Ternary                 8-bit
+             │                   Symbolic
+             │                   Processing
+             │                       │
+             └───────────┬───────────┘
+                         │
+                         ▼
+                 LOCAL COMPUTATION
+                         │
+                         +
+                  ADJACENT MEMORY
+                         │
+                         +
+                 SPECIALIZED UNITS
+                         │
+                         ▼
+                 SPATIAL FABRIC
+                         │
+                         ▼
+                HYBRID ARCHITECTURE
 ```
 
-### Throughput
+However, the hypothesis is intentionally open.
 
-Comparison of tokens/cycle across the three architectures.
+The experiments may demonstrate that:
 
-### Operations per Token
+* ternary representation helps;
+* spatial organization helps;
+* local memory helps;
+* specialization helps;
+* only particular combinations help;
+* only specific workloads benefit;
+* or the additional architectural complexity eliminates the expected advantage.
 
-Comparison of computational work independent of clock frequency.
-
-### Memory Cost
-
-Logical storage requirements per token and per tile.
-
-### Routing Cost
-
-Average and maximum number of hops.
-
-### Tile Utilization
-
-Percentage of active processing resources.
-
-### Scaling Efficiency
-
-Performance as the mesh grows from:
-
-```text
-2×2 → 4×4 → 8×8 → 16×16
-```
-
-### Energy
-
-Parametric energy/token under different technology assumptions.
+All outcomes are valid research results.
 
 ---
 
-# 17. Results Classification
+# 21. Important Architectural Principle
 
-The project explicitly separates experimental evidence into three categories.
+The central principle behind Symbologic-8 can be summarized as:
 
-## A. Simulated Results
+> **Keep computation close to the information required for computation.**
 
-These are directly generated by the Python/RTL simulation.
+TernaryBreath adds a complementary principle:
+
+> **Treat data representation and spatial organization as independent architectural variables that can be experimentally combined.**
+
+Together, these principles lead to a broader architecture:
+
+```text
+Representation
+      ↓
+Processing
+      ↓
+Local Memory
+      ↓
+Specialization
+      ↓
+Communication
+      ↓
+Storage
+```
+
+The processor therefore becomes less like a single computational engine and more like a structured computational fabric.
+
+---
+
+# 22. From Processor to Computational Fabric
+
+The long-term vision is not necessarily a conventional CPU with additional cache.
+
+Instead, the architecture could evolve toward a collection of computational nodes:
+
+```text
+              ┌──────────────┐
+              │ Storage      │
+              │ Memory       │
+              └──────┬───────┘
+                     │
+              ┌──────▼───────┐
+              │ Communication│
+              │ Fabric       │
+              └──────┬───────┘
+                     │
+      ┌──────────────┼──────────────┐
+      │              │              │
+      ▼              ▼              ▼
+   Node A         Node B         Node C
+  Compute         Compute        Compute
+  + Memory        + Memory       + Memory
+      │              │              │
+      └──────────────┼──────────────┘
+                     │
+                Local exchange
+```
+
+Each node can potentially contain different capabilities.
+
+This creates a heterogeneous computational fabric rather than a homogeneous processor.
+
+---
+
+# 23. Validation Levels
+
+The project should maintain a strict distinction between three levels of evidence.
+
+## Level A — Simulation
 
 Examples:
 
 * latency;
-* simulated throughput;
-* operations/token;
-* tile utilization;
-* routing hops;
-* simulated scaling;
-* workload execution statistics.
+* throughput;
+* routing;
+* utilization;
+* reuse;
+* locality;
+* simulated scaling.
 
-These can be reproduced from the benchmark configuration.
-
----
-
-## B. Theoretical / Parametric Results
-
-These are derived from explicit architectural assumptions.
+## Level B — Parametric / Theoretical
 
 Examples:
 
-* energy/token;
-* projected tokens/second at a hypothetical clock;
-* projected scaling;
-* logical memory estimates;
-* sensitivity to routing energy.
+* projected energy;
+* projected throughput;
+* logical memory requirements;
+* sensitivity analysis.
 
-These should always be labeled as estimates or projections.
-
----
-
-## C. Hardware Results
-
-These require actual FPGA/ASIC implementation.
+## Level C — Hardware
 
 Examples:
 
-* LUT usage;
+* FPGA LUT usage;
 * flip-flop usage;
 * BRAM usage;
 * DSP usage;
-* actual Fmax;
-* timing closure;
+* achievable Fmax;
 * routing congestion;
-* physical power;
-* measured energy/token;
-* ASIC area;
-* physical performance.
+* measured power;
+* physical energy/token;
+* ASIC area.
 
-These values must not be inferred from the Python model.
-
----
-
-# 18. Validation Status
-
-The repository should maintain an explicit validation table.
-
-| Metric / Feature           | Status                                 |
-| -------------------------- | -------------------------------------- |
-| 2-bit/trit representation  | Architectural                          |
-| Three valid ternary states | Architectural                          |
-| Reserved fourth state      | Architectural                          |
-| Ternary datapath           | RTL / Simulation                       |
-| 4×4 spatial mesh           | Simulation target                      |
-| Pattern matching           | Simulation                             |
-| Rule engine                | Simulation                             |
-| Stream processing          | Simulation                             |
-| Latency                    | Simulated                              |
-| Throughput                 | Simulated                              |
-| Operations/token           | Simulated                              |
-| Routing hops               | Simulated                              |
-| Tile utilization           | Simulated                              |
-| Parametric energy          | Estimated                              |
-| Binary baseline            | Experimental comparison                |
-| FPGA LUT/FF usage          | Requires synthesis                     |
-| FPGA Fmax                  | Requires timing analysis               |
-| FPGA routing congestion    | Requires implementation                |
-| FPGA power                 | Requires power analysis or measurement |
-| ASIC area                  | Requires ASIC synthesis                |
-| Physical energy/token      | Requires hardware measurement          |
+No Level B or Level C claim should be presented as a measured result unless the corresponding experiment has actually been performed.
 
 ---
 
-# 19. Proposed Experimental Sequence
+# 24. Repository Structure
 
-The recommended evaluation sequence is:
-
-```text
-STEP 1
-Validate ternary encoding
-        │
-        ▼
-STEP 2
-Validate ternary datapath
-        │
-        ▼
-STEP 3
-Validate spatial mesh
-        │
-        ▼
-STEP 4
-Run System 1
-        │
-        ▼
-STEP 5
-Run System 2
-        │
-        ▼
-STEP 6
-Run System 3
-        │
-        ▼
-STEP 7
-Compare all systems
-        │
-        ▼
-STEP 8
-Scale mesh
-        │
-        ▼
-STEP 9
-Run energy sensitivity analysis
-        │
-        ▼
-STEP 10
-Validate promising configurations on FPGA
-```
-
-This prevents the hybrid architecture from being evaluated without understanding the contribution of its individual components.
-
----
-
-# 20. Recommended Repository Structure
+A unified repository could eventually use a structure such as:
 
 ```text
 .
-├── src/
-│   ├── ternary_system.v
+├── ternarybreath/
 │   ├── ternary_alu.v
-│   ├── ternary_add_tree.v
+│   ├── ternary_register.v
+│   ├── ternary_encoding.v
 │   └── ...
 │
-├── sim/
-│   ├── testbench/
+├── symbologic8/
+│   ├── processor8.v
+│   ├── local_memory.v
+│   ├── symbolic_unit.v
+│   ├── communication.v
+│   └── ...
+│
+├── spatial/
+│   ├── tile.v
+│   ├── mesh.v
+│   ├── router.v
 │   └── ...
 │
 ├── python/
-│   ├── ternary_model.py
 │   ├── binary_model.py
+│   ├── ternary_model.py
+│   ├── symbologic8_model.py
 │   ├── tile.py
 │   ├── mesh.py
+│   ├── memory.py
 │   ├── metrics.py
 │   ├── energy.py
-│   ├── experiments.py
-│   ├── comparison.py
-│   │
-│   └── workloads/
-│       ├── pattern_matching.py
-│       ├── rule_engine.py
-│       └── stream_processing.py
+│   └── experiments.py
+│
+├── workloads/
+│   ├── pattern_matching.py
+│   ├── rule_engine.py
+│   ├── stream_processing.py
+│   ├── lookup_processing.py
+│   └── symbolic_transform.py
 │
 ├── results/
 │   ├── raw/
@@ -961,282 +1025,232 @@ This prevents the hybrid architecture from being evaluated without understanding
 
 ---
 
-# 21. Research Questions
+# 25. Proposed Experimental Sequence
 
-The experimental framework is designed to answer:
-
-### RQ1 — Ternary Representation
-
-Can a balanced ternary datapath encoded using two binary bits provide useful computational characteristics on conventional binary hardware?
-
-### RQ2 — Reserved State
-
-Can the fourth encoding state be effectively used for control, synchronization, fault detection, or metadata?
-
-### RQ3 — Spatial Execution
-
-Does a localized tile architecture improve throughput or scalability for suitable workloads?
-
-### RQ4 — Hybrid Architecture
-
-Does combining ternary computation with spatial execution produce an advantage beyond either approach independently?
-
-### RQ5 — Workload Dependence
-
-Which workloads benefit most from each architecture?
-
-### RQ6 — Scaling
-
-At what mesh size does communication overhead begin to dominate computational parallelism?
-
-### RQ7 — Energy
-
-Under realistic parameter ranges, does the hybrid architecture show a potential energy advantage?
-
----
-
-# 22. Architectural Hypothesis
-
-The project can be summarized by the following hypothesis:
+The research can progress incrementally.
 
 ```text
-                  TERNARY ENCODING
-                         │
-              ┌──────────┴──────────┐
-              │                     │
-              ▼                     ▼
-       Compact data/control    Ternary arithmetic
-              │                     │
-              └──────────┬──────────┘
-                         │
-                         ▼
-                 TERNARY TILE
-                         │
-                         ▼
-                  SPATIAL MESH
-                         │
-                         ▼
-                HYBRID PROCESSOR
+STEP 1
+Validate binary baseline
+        │
+        ▼
+STEP 2
+Validate ternary encoding
+        │
+        ▼
+STEP 3
+Validate ternary datapath
+        │
+        ▼
+STEP 4
+Validate spatial binary mesh
+        │
+        ▼
+STEP 5
+Validate Symbologic-8 node
+        │
+        ▼
+STEP 6
+Add adjacent local memory
+        │
+        ▼
+STEP 7
+Add specialized processing
+        │
+        ▼
+STEP 8
+Run common workloads
+        │
+        ▼
+STEP 9
+Compare independent contributions
+        │
+        ▼
+STEP 10
+Evaluate hybrid architectures
+        │
+        ▼
+STEP 11
+Scale the architecture
+        │
+        ▼
+STEP 12
+Validate promising configurations on FPGA
 ```
 
-However, the hypothesis is intentionally open-ended.
+This sequence avoids introducing the entire architecture at once.
 
-The experiments may demonstrate that:
-
-* ternary encoding helps;
-* spatial organization helps;
-* both help independently;
-* the hybrid architecture helps;
-* only specific workloads benefit;
-* or the additional encoding/control overhead eliminates the expected advantage.
-
-All of these are valid research outcomes.
+Each architectural mechanism can first be measured independently.
 
 ---
 
-# 23. Limitations
+# 26. Current Scope
 
-The use of two binary bits per trit does **not** imply a direct 2× performance improvement.
-
-The encoding may introduce:
-
-* decoder logic;
-* additional control;
-* storage overhead;
-* conversion overhead;
-* invalid-state handling;
-* additional switching activity.
-
-Likewise, a spatial mesh does not automatically reduce routing cost.
-
-Its effectiveness depends on:
-
-* workload locality;
-* communication patterns;
-* tile utilization;
-* topology;
-* buffering;
-* congestion;
-* synthesis;
-* physical implementation.
-
-The project therefore treats performance and energy improvements as **testable hypotheses rather than predetermined conclusions**.
-
----
-
-# 24. Hardware Validation Roadmap
-
-After software simulation, promising configurations should be implemented on FPGA.
-
-A possible validation sequence is:
+The initial scope can be defined as:
 
 ```text
-Python model
-     │
-     ▼
-RTL simulation
-     │
-     ▼
-Logic synthesis
-     │
-     ▼
-Place & Route
-     │
-     ▼
-Timing analysis
-     │
-     ▼
-FPGA implementation
-     │
-     ▼
-Power estimation
-     │
-     ▼
-Physical measurement
-```
+TernaryBreath
+    │
+    ├── 2 bits / trit
+    ├── 3 valid ternary states
+    ├── 1 reserved state
+    ├── ternary datapath
+    └── spatial ternary processing
 
-The final stage should be used to determine whether the architectural trends predicted by simulation survive real hardware constraints.
+Symbologic-8
+    │
+    ├── 8-bit processing units
+    ├── adjacent local memory
+    ├── reusable/precomputed information
+    ├── specialized processing
+    └── spatial communication
+
+Common Infrastructure
+    │
+    ├── binary baseline
+    ├── workloads
+    ├── simulation
+    ├── metrics
+    ├── energy model
+    └── FPGA validation
+```
 
 ---
 
-# 25. What This Project Does Not Claim
+# 27. What the Projects Do Not Claim
 
-This project does not claim that:
+Neither TernaryBreath nor Symbologic-8 claims that:
 
-* ternary logic is universally superior to binary logic;
+* ternary logic is universally superior to binary;
 * two-bit ternary encoding automatically reduces area;
-* the reserved fourth state automatically reduces hardware cost;
-* a spatial mesh automatically improves performance;
+* the reserved state automatically improves performance;
+* spatial processing automatically improves execution;
+* local memory automatically reduces total energy;
+* precomputed information is always beneficial;
+* specialized processing is always more efficient;
 * simulated energy equals physical energy;
 * theoretical frequency equals achievable FPGA frequency.
 
-Such claims require appropriate experimental evidence.
+All such claims require experimental evidence.
 
 ---
 
-# 26. Research Contribution
+# 28. Research Contribution
 
-The primary contribution of the project is the creation of a reproducible experimental framework that compares:
+The broader contribution of the project is therefore not simply the creation of a new processor design.
+
+It is the construction of an experimental framework for investigating how several architectural mechanisms interact:
 
 ```text
-                ┌──────────────────────┐
-                │ Binary Baseline      │
-                └──────────┬───────────┘
-                           │
-             ┌─────────────┼─────────────┐
-             ▼             ▼             ▼
-        Ternary        Spatial        Hybrid
-        Datapath       Coprocessor     System
-             │             │             │
-             └─────────────┼─────────────┘
-                           ▼
-                  Common Workloads
-                           │
-                           ▼
-                 Common Measurements
-                           │
-                           ▼
-               Reproducible Comparison
+       ┌──────────────────────┐
+       │ Binary Technology    │
+       └──────────┬───────────┘
+                  │
+       ┌──────────┴───────────┐
+       ▼                      ▼
+ Ternary Representation   8-bit Symbolic
+       │                      │
+       ▼                      ▼
+ Ternary Datapath       Local Processing
+       │                      │
+       └──────────┬───────────┘
+                  ▼
+           Spatial Fabric
+                  │
+                  +
+           Adjacent Memory
+                  │
+                  +
+          Specialized Units
+                  │
+                  ▼
+          Hybrid Architecture
 ```
 
-The central experimental question is not simply:
+The fundamental research question is therefore:
 
-> "Is ternary better?"
-
-but rather:
-
-> **Under which workloads and architectural conditions does ternary encoding, spatial processing, or their combination provide a measurable advantage over a conventional binary baseline?**
+> **Under which workloads and architectural conditions can alternative representation, spatial processing, local memory, reusable information, and specialized computation provide a measurable advantage over conventional binary architectures?**
 
 ---
 
-# 27. Current Scope
+# 29. Long-Term Vision
 
-The initial experimental configuration is:
+The long-term direction is a processor in which computation and memory are not treated as completely separate resources.
+
+Instead:
 
 ```text
-Encoding:
-    2 bits / trit
-
-Valid states:
-    3 ternary states
-
-Reserved state:
-    1 control/exception state
-
-Spatial configuration:
-    4 × 4 tiles
-
-Workloads:
-    Pattern Matching
-    Rule Engine
-    Stream Processing
-
-Architectures:
-    System 1 — Ternary Datapath
-    System 2 — Spatial Coprocessor
-    System 3 — Hybrid
-
-Metrics:
-    Latency
-    Throughput
-    Operations/token
-    Memory cost
-    Routing cost
-    Parallelism
-    Scalability
-    Parametric energy
+        DATA
+          │
+          ▼
+   ┌───────────────┐
+   │ Local Memory  │
+   └───────┬───────┘
+           │
+           ▼
+   ┌───────────────┐
+   │ Specialized   │
+   │ Processing    │
+   └───────┬───────┘
+           │
+           ▼
+   ┌───────────────┐
+   │ Local Result  │
+   └───────┬───────┘
+           │
+       if required
+           │
+           ▼
+   Shared Storage
 ```
 
-The architecture and simulator should remain parameterized so that larger meshes, additional workloads, and alternative encodings can be evaluated later.
+The processing element keeps information close to where it is used, performs its specialized operation, retains intermediate results locally, and transfers information to shared storage only when necessary.
+
+This is the architectural direction in which Symbologic-8 extends the research initiated by TernaryBreath.
 
 ---
 
-# 28. Conclusion
+# 30. Conclusion
 
-This project explores a practical path toward ternary-inspired computing without requiring a custom ternary semiconductor process.
+TernaryBreath and Symbologic-8 can be understood as two complementary explorations of a broader architectural concept.
 
-The fundamental abstraction is:
+TernaryBreath asks:
 
-```text
-       2 binary bits
-             │
-       ┌─────┴─────┐
-       │           │
-   3 data states   1 reserved state
-       │           │
-       ▼           ▼
-   Ternary data   Control /
-                  metadata /
-                  fault state
-```
+> **Can alternative data representation and spatial computation provide measurable benefits on conventional binary hardware?**
 
-This abstraction can be evaluated at two architectural levels:
+Symbologic-8 asks:
 
-```text
-Level 1:
-Ternary Datapath
+> **Can computation become more efficient when processing, specialized functionality, reusable information, and local memory are placed close together in a spatial architecture?**
 
-Level 2:
-Spatial Processing Fabric
-```
+The combined research direction asks a larger question:
 
-and ultimately combined:
+> **Can a processor be designed as a distributed computational fabric in which data representation, processing, memory locality, specialization, and communication are all architectural variables?**
+
+The answer should not be assumed in advance.
+
+The purpose of the project is to build the experimental infrastructure necessary to measure it.
+
+The architecture is therefore intentionally modular:
 
 ```text
-Ternary Datapath
-        +
-Spatial Mesh
-        =
-Hybrid Ternary Spatial Coprocessor
+Binary Baseline
+      │
+      ├── Ternary Representation
+      │
+      ├── Spatial Processing
+      │
+      ├── Symbologic-8 Processing
+      │
+      ├── Adjacent Local Memory
+      │
+      ├── Specialized Computation
+      │
+      └── Hybrid Architectures
 ```
 
-The three-system experimental methodology makes it possible to determine whether any observed improvement originates from:
+Each mechanism can be enabled, disabled, and compared.
 
-1. ternary representation;
-2. spatial organization;
-3. or the interaction between both.
-
-The project therefore focuses on **measurable, reproducible architectural evidence**, with a strict distinction between simulated results, theoretical estimates, and hardware results that remain to be validated.
+This makes it possible to identify not only whether an architecture performs better, but **why**.
 
 ---
 
@@ -1244,4 +1258,6 @@ The project therefore focuses on **measurable, reproducible architectural eviden
 
 **Research / Experimental**
 
-The architecture is under investigation. Performance, energy, area, and scaling claims should be considered provisional until supported by reproducible simulation, RTL verification, FPGA synthesis/implementation, or physical hardware measurements.
+TernaryBreath and Symbologic-8 are experimental architectural research projects.
+
+Performance, energy, area, scalability, and efficiency claims remain hypotheses until supported by reproducible simulation, RTL verification, FPGA synthesis/implementation, or physical hardware measurements.
