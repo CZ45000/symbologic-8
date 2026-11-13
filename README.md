@@ -1,3 +1,40 @@
+> **About this repository**
+>
+> This is a personal, exploratory repository. The files grew out of dialogues
+> with an AI assistant and follow the path of those conversations, so the same
+> ideas often come back in different forms and the structure is not tidy.
+> Please read them as steps in an exploration, not as finished documents.
+>
+> **Status:** concepts, hypotheses and a small HDL/assembler example. Nothing
+> here has been benchmarked or validated on hardware, and no performance
+> advantage is claimed. If any idea turns out to be useful, that is a bonus;
+> nothing here is meant to be pushed.
+
+## Where to start
+
+If you only have a few minutes: **README3**, then **README16**, then **README17**.
+
+| File | What it is |
+|---|---|
+| README.md | Overview, the core idea, the 256-symbol LUT example, assembler, spec v0.1 and research directions on memory and devices |
+| README2 | Symbolic assembly logic and dynamic spatial computation: the research framework |
+| README3 | TernaryBreath and Symbologic-8 together: the shared architectural question |
+| README4 | Transient data, lightweight tokens and spatial processing |
+| README5 | Contextual data encoding for spatial processing and memory |
+| README6 | Spatial address-driven encoding and decoding |
+| README7 | Origin of the material (preface) and distributed semantic processing, local memory |
+| README8 | Symbol-oriented architecture: geometric interaction, locality, reusable procedures |
+| README9 | Toward an architectural language |
+| README10 | Linguistic reverse engineering for architectural computing |
+| README11 | Structural computing: AI-driven architectural discovery |
+| README12 | Phenomenon-driven computing architecture |
+| README13 | Structural computing: from real-world structures to silicon |
+| README14 | Structural history and evolutionary observability |
+| README15 | Toward a unified structural programming and visualization environment |
+| README16 | Preliminary assessment generated with an AI (includes a candidate first application, S8-IER). Its percentages are subjective AI estimates, not measurements |
+| README17 | About this repository: nature of the work and role of AI |
+
+
 Symbologic-8 is being explored as a cooperative coprocessor architecture designed to complement conventional CPUs through specialized spatial processing and parallel data flows. Its potential development roadmap includes simulation, FPGA prototyping, mature-node ASIC evaluation and possible external USB-C or internal PCIe implementations. The project aims to investigate not only execution speed, but also CPU offloading, system-level concurrency, throughput and energy efficiency. These are research objectives to be validated through reproducible experiments and hardware measurements.
 
 [Symbologic-8.txt](https://github.com/user-attachments/files/30973214/Symbologic-8.txt): A Matrix-Based, Symbol-Driven 8-Bit Architecture
