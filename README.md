@@ -10,9 +10,9 @@
 > advantage is claimed. If any idea turns out to be useful, that is a bonus;
 > nothing here is meant to be pushed.
 
-## Where to start
 
-If you only have a few minutes: **README3**, then **README16**, then **README17**.
+
+
 
 | File | What it is |
 |---|---|
