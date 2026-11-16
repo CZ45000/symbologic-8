@@ -1,3 +1,9 @@
+If these pages spark your curiosity, I wish you an enjoyable read and some good fun. If they bore you instead, I still wish you a pleasant bit of boredom!
+
+Symbologic-8 is an exploration of ideas and possibilities, shared without any claim of certainty or achievement. Read it freely, enjoy whatever catches your imagination, and feel free to leave the rest behind.
+
+Happy reading!
+
 > **About this repository**
 >
 > This is a personal, exploratory repository. The files grew out of dialogues
